@@ -19,7 +19,7 @@ module.exports = {
     "import/extensions": 0,
     "react/jsx-filename-extension": 0,
     "react/no-unused-prop-types": 1,
-    "react/forbid-prop-types": 1,
+    "react/prop-types": 0,
     "react/prefer-stateless-function": 1,
     "no-mixed-operators": 1,
     "import/first": 1,

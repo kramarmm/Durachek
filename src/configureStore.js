@@ -1,21 +1,21 @@
 import { createStore, applyMiddleware } from 'redux';
 // import thunk from 'redux-thunk';
-import rootReducer from './reducers';
+import DurachekReducer from './reducers/durachek.js';
 // here i can past my API for third parameter in actions
 
 /* eslint-disable */
 export default function configureStore() {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   const store = createStore(
-      rootReducer,
-      // composeEnhancers(
-      //     applyMiddleware(thunk),
-      // ),
+      DurachekReducer,
+      composeEnhancers(
+          // applyMiddleware(thunk),
+      ),
   );
 
   if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      const nextRootReducer = require('./reducers');
+    module.hot.accept('./reducers/durachek.js', () => {
+      const nextRootReducer = require('./reducers/durachek.js');
       store.replaceReducer(nextRootReducer);
     });
   }

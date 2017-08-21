@@ -7,14 +7,14 @@ const styles = {
 };
 
 @Radium
-class LooTable extends Component {
+class Start extends Component {
   render() {
     return (
-      <span style={styles}>
-        Hello!
-      </span>
+      <div>
+        hello
+      </div>
     );
   }
 }
 
-export default LooTable;
+export default Start;
