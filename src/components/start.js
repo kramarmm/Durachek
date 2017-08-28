@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
-import Radium from 'radium';
 
-const styles = {
-  // backgroundImage: ''
-  background: 'red',
-};
+import Modal from './modal.js';
 
-@Radium
 class Start extends Component {
+
   render() {
+
+    const lastVisit = parseInt(localStorage.lastVisit, 10);
+    const lastVisitMoreThanThirtyMinutes = lastVisit ? Date.now() - lastVisit > 1800000 :;
+
     return (
-      <div>
-        hello
-      </div>
+      <Modal
+        isOpen={!lastVisitMoreThanThirtyMinutes}
+      >
+        {
+          isNewUser ? (
+            <div>isNewUser</div>
+          ) : null
+        }
+      </Modal>
     );
   }
 }
 
 export default Start;
+
+
+// to localStorage 
+// lastVisit (for modal greetings)
+// 

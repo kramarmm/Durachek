@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import Radium from 'radium';
 import Card from './card.js';
 
 const styles = {
-  backgroundColor: '#191A1F',
+  backgroundColor: 'rgb(48, 26, 66)',
   height: '100%',
   width: '100%',
   position: 'absolute',
@@ -11,7 +10,6 @@ const styles = {
   left: '0',
 };
 
-@Radium
 class LooTable extends Component {
   render() {
     return (
