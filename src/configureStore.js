@@ -1,7 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
-// import thunk from 'redux-thunk';
+import thunk from 'redux-thunk';
+
 import DurachekReducer from './reducers/durachek.js';
 // here i can past my API for third parameter in actions
+//   applyMiddleware(thunk.withExtraArgument(api))
 
 /* eslint-disable */
 export default function configureStore() {
@@ -9,7 +11,7 @@ export default function configureStore() {
   const store = createStore(
       DurachekReducer,
       composeEnhancers(
-          // applyMiddleware(thunk),
+          applyMiddleware(thunk),
       ),
   );
 

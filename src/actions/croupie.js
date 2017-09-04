@@ -1,25 +1,29 @@
+import getShuffledDeck from '../assets/deck.js';
+
 export const GET_OUT = 'GET_OUT';
+export const GET_CARDS = 'GET_CARDS';
 
-function shuffle(deck) {
-  let totalNumbers = deck.length - 1 + 1;
-  let arrayOfNumbers = [];
-  const shuffledDeckPlaces = [];
-  const shuffledDeck = [];
-  let tempRandomNumber = 0;
+export function getOutCards() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: GET_OUT,
+      payload: getShuffledDeck(),
+    });
 
-  while(totalNumbers--) {
-      arrayOfNumbers.push(totalNumbers + 1);
-  }
+    dispatch({
+      type: GET_CARDS,
+      payload: {
+        quantity: 6,
+        usersCards: getState().croupie.deck.slice(-6),
+      },
+    });
 
-  while(arrayOfNumbers.length) {
-      tempRandomNumber = Math.round(Math.random() * (arrayOfNumbers.length - 1));
-      shuffledDeckPlaces.push(arrayOfNumbers[tempRandomNumber]);
-      arrayOfNumbers.splice(tempRandomNumber, 1);
-  }
-
-  for (let i = 0; i < shuffledDeckPlaces.length; i++) {
-    shuffledDeck.push(deck[shuffledDeckPlaces[i]]);
-  }
-
-  return shuffledDeck;
+    dispatch({
+      type: GET_CARDS,
+      payload: {
+        quantity: 6,
+        robotsCards: getState().croupie.deck.slice(-6),
+      },
+    });
+  };
 }

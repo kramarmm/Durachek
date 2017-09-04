@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import * as croupieActions from '../actions/croupie.js';
 
@@ -13,16 +12,15 @@ const Durachek = props => (
 
     {
       props.croupie.gameState === 'start' ? (
-        <Start />
+        <Start
+          getOutCards={props.getOutCards}
+        />
       ) : props.croupie.gameState === 'end' ? (
         <End />
       ) : null
     }
 
-    <Process
-      croupie={props.croupie}
-      mind={props.mind}
-    />
+    <Process />
 
   </div>
 );
@@ -30,17 +28,11 @@ const Durachek = props => (
 function mapStateToProps(state) {
   return {
     croupie: state.croupie,
-    mind: state.mind,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    ...bindActionCreators(croupieActions, dispatch),
+    robot: state.robot,
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  croupieActions,
 )(Durachek);

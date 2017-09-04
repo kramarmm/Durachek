@@ -1,31 +1,56 @@
 import { combineReducers } from 'redux';
-
-import { defaultDeck } from '../default-deck';
-import { shuffle } from '../actions/croupie.js';
-
 import {
-	GET_OUT,
+  GET_OUT,
+  GET_CARDS,
 } from '../actions/croupie.js';
 
 function gameState(state = 'start', action) {
   switch (action.type) {
     case GET_OUT:
-      return state + 1;
+      return 'process';
     default:
       return state;
   }
-};
+}
 
-function deck(state = defaultDeck, action) {
+function deck(state = [], action) {
   switch (action.type) {
     case GET_OUT:
-      return shuffle(defaultDeck);
+      return action.payload;
+    case GET_CARDS:
+      return state.slice(0, state.length - action.payload.quantity);
     default:
       return state;
   }
-};
+}
+
+function usersCards(state = {}, action) {
+  switch (action.type) {
+    case GET_CARDS:
+      return {
+        ...state,
+        cards: action.payload.usersCards || state.cards,
+      };
+    default:
+      return state;
+  }
+}
+
+function robotsCards(state = {}, action) {
+  switch (action.type) {
+    case GET_CARDS:
+      return {
+        ...state,
+        cards: action.payload.robotsCards || state.cards,
+      };
+    default:
+      return state;
+  }
+}
 
 export default combineReducers({
-	gameState,
-	deck,
+  gameState,
+  deck,
+  usersCards,
+  robotsCards,
 });

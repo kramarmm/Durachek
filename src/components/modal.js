@@ -7,7 +7,7 @@ const backdropStyle = {
   bottom: '0',
   left: '0',
   zIndex: '1040',
-  backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  backgroundColor: 'rgba(80, 0, 250, 0.05)',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

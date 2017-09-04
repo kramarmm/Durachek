@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import croupie from './croupie.js';
-import mind from './mind.js';
+import robot from './robot.js';
 
 export default combineReducers({
   croupie,
-  mind,
+  robot,
 });

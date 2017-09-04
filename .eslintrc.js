@@ -26,5 +26,6 @@ module.exports = {
     "import/prefer-default-export": 1,
     "comma-dangle": 1,
     "linebreak-style": 0,
+    "no-plusplus": 0,
   }
 };

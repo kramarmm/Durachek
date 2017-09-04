@@ -1,4 +1,4 @@
-export default function mind(state = {}, action) {
+export default function robot(state = {}, action) {
   switch (action.type) {
     case 'INCREMENT':
       return state + 1;
