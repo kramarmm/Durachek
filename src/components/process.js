@@ -7,56 +7,76 @@ import * as croupieActions from '../actions/croupie.js';
 
 const styles = {
   LooTable: {
-    backgroundColor: '#011419',
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    top: '0',
-    left: '0',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignContent: 'space-between',
+    width: '100vw',
+    height: '100vh',
   },
 
   robotsCardBlock: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    marginTop: '25px',
   },
 
   usersCardBlock: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    marginBottom: '25px',
+  },
+
+  trumpCard: {
+    position: 'fixed',
+    top: '50%',
+    transform: 'translate(0%, -50%)',
+    left: '25px',
+  },
+
+  deckBack: {
+    position: 'fixed',
+    top: '50%',
+    transform: 'translate(0%, -50%) rotate(9deg)',
+    left: '200px',
   },
 };
 
 class LooTable extends Component {
   render() {
     const {
-      gameState,
+      deck,
+      trumpCard,
       robotsCards,
       usersCards,
     } = this.props.croupie;
 
     return (
-      <div style={styles.LooTable}>
+      <div>
+        <div style={styles.LooTable}>
+          <div style={styles.robotsCardBlock}>
+            {
+              robotsCards.cards.map((card, i) => (
+                <Card key={card} card={card} />
+              ))
+            }
+          </div>
+
+          <div style={styles.usersCardBlock}>
+            {
+              usersCards.cards.map((card, i) => (
+                <Card key={card} card={card} />
+              ))
+            }
+          </div>
+        </div>
+
+        <div style={styles.trumpCard}>
+          <Card card={trumpCard} />
+        </div>
         {
-          gameState === 'process' ? (
-            <div style={styles.robotsCardBlock}>
-              {
-                robotsCards.cards.map((card, i) => (
-                  <Card key={card} card={card} place={i} />
-                ))
-              }
+          deck.length ? (
+            <div style={styles.deckBack}>
+              <Card card="back" />
             </div>
-          ) : <div>Game didn't start yet</div>
-        }
-        {
-          gameState === 'process' ? (
-            <div style={styles.usersCardBlock}>
-              {
-                usersCards.cards.map((card, i) => (
-                  <Card key={card} card={card} place={i} />
-                ))
-              }
-            </div>
-          ) : <div>Game didn't start yet</div>
+          ) : null
         }
       </div>
     );

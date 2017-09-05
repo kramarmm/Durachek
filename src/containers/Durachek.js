@@ -7,9 +7,14 @@ import Start from '../components/start.js';
 import Process from '../components/process.js';
 import End from '../components/end.js';
 
-const Durachek = props => (
-  <div>
+const rootStyles = {
+  color: 'white',
+  fontFamily: 'Arial',
+  backgroundColor: '#011419',
+};
 
+const Durachek = props => (
+  <div style={rootStyles}>
     {
       props.croupie.gameState === 'start' ? (
         <Start
@@ -17,11 +22,10 @@ const Durachek = props => (
         />
       ) : props.croupie.gameState === 'end' ? (
         <End />
+      ) : props.croupie.gameState === 'process' ? (
+        <Process />
       ) : null
     }
-
-    <Process />
-
   </div>
 );
 

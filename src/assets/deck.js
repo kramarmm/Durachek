@@ -6,14 +6,14 @@ const defaultDeck = [
 ];
 
 function shuffle(deck) {
-  let totalNumbers = deck.length - 1 + 1;
+  let totalNumbers = deck.length;
   const arrayOfNumbers = [];
   const shuffledDeckPlaces = [];
   const shuffledDeck = [];
   let tempRandomNumber = 0;
 
   while (totalNumbers--) {
-    arrayOfNumbers.push(totalNumbers + 1);
+    arrayOfNumbers.push(totalNumbers);
   }
 
   while (arrayOfNumbers.length) {

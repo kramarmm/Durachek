@@ -2,6 +2,7 @@ import getShuffledDeck from '../assets/deck.js';
 
 export const GET_OUT = 'GET_OUT';
 export const GET_CARDS = 'GET_CARDS';
+export const GET_TRUMP_CARD = 'GET_TRUMP_CARD';
 
 export function getOutCards() {
   return (dispatch, getState) => {
@@ -24,6 +25,11 @@ export function getOutCards() {
         quantity: 6,
         robotsCards: getState().croupie.deck.slice(-6),
       },
+    });
+
+    dispatch({
+      type: GET_TRUMP_CARD,
+      payload: getState().croupie.deck.slice(-1),
     });
   };
 }

@@ -12,10 +12,3 @@ class Card extends Component {
 }
 
 export default Card;
-
-
-
-      // <div style={{
-      //   position: 'relative',
-      //   left: `${50 * this.props.place}px` }}
-      // >
