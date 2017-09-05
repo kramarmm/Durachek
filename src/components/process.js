@@ -8,10 +8,10 @@ import * as croupieActions from '../actions/croupie.js';
 const styles = {
   LooTable: {
     display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignContent: 'space-between',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    minWidth: '800px',
     width: '100vw',
     height: '100vh',
   },
