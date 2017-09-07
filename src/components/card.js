@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Card extends Component {
-  render() {
+export default function Card(props) {
+  if (props.back) {
     return (
-      <img
-        src={`images/cards/${this.props.card.value}${this.props.card.suit}.png`}
-        alt={`${this.props.card.value}${this.props.card.suit}`}
-      />
+      <img src="images/cards/back.png" alt="back" />
     );
   }
+  return (
+    <img
+      src={`images/cards/${props.card.value}${props.card.suit}.png`}
+      alt={`${props.card.value}${props.card.suit}`}
+    />
+  );
 }
-
-export default Card;

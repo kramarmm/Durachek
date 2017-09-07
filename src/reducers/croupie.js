@@ -1,13 +1,14 @@
 import { combineReducers } from 'redux';
 import {
-  GET_OUT,
+  SUFFLE_DECK,
   GET_CARDS,
   GET_TRUMP_CARD,
+  SET_ACTIVE_PLAYER,
 } from '../actions/croupie.js';
 
 function gameState(state = 'start', action) {
   switch (action.type) {
-    case GET_OUT:
+    case SUFFLE_DECK:
       return 'process';
     default:
       return state;
@@ -16,7 +17,7 @@ function gameState(state = 'start', action) {
 
 function deck(state = [], action) {
   switch (action.type) {
-    case GET_OUT:
+    case SUFFLE_DECK:
       return action.payload;
     case GET_CARDS:
       return state.slice(0, state.length - action.payload.quantity);
@@ -62,8 +63,8 @@ function robotsCards(state = {}, action) {
 
 function activePlayer(state = '', action) {
   switch (action.type) {
-    case GET_CARDS:
-      return action.payload.activePlayer;
+    case SET_ACTIVE_PLAYER:
+      return action.payload;
     default:
       return state;
   }
@@ -81,16 +82,25 @@ export default combineReducers({
 // ---------- need sorting inner cards ---------- //
 const suits = ['d', 's', 'h', 'c'];
 export function putCardsInRightOrder(cards, trump) {
-  const index = suits.findIndex(s => s === trump[0][trump[0].length - 1]);
+  const index = suits.findIndex(s => s === trump[0].suit);
   suits.splice(index, 1);
-  suits.unshift(trump[0][trump[0].length - 1]);
+  suits.unshift(trump[0].suit);
   return suits.reduce((acc, suit) => {
-    return acc.concat(cards.filter(card => card[card.length - 1] === suit));
+    return acc.concat(cards.filter(card => card.suit === suit).sort((a, b) => b.value - a.value));
   }, []);
 }
 
 export function setFirstActivePlayer(croupieState) {
   const usersC = croupieState.usersCards.cards;
   const robotsC = croupieState.robotsCards.cards;
-  const trump = croupieState.trumpCard[1];
+  const trump = croupieState.trumpCard.suit;
+  let maxUserCard = 0;
+  let firstActivePlayer = 'user';
+  usersC.forEach((card) => {
+    if (card.suit === trump && card.value > maxUserCard) maxUserCard = card.value;
+  });
+  robotsC.forEach((card) => {
+    if (card.suit === trump && card.value > maxUserCard) firstActivePlayer = 'robot';
+  });
+  return firstActivePlayer;
 }

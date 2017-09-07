@@ -53,16 +53,16 @@ class LooTable extends Component {
         <div style={styles.LooTable}>
           <div style={styles.robotsCardBlock}>
             {
-              robotsCards.cards.map((card, i) => (
-                <Card key={card} card={card} />
+              robotsCards.cards.map(card => (
+                <Card key={`${card.value}${card.suit}`} card={card} />
               ))
             }
           </div>
 
           <div style={styles.usersCardBlock}>
             {
-              usersCards.cards.map((card, i) => (
-                <Card key={card} card={card} />
+              usersCards.cards.map(card => (
+                <Card key={`${card.value}${card.suit}`} card={card} />
               ))
             }
           </div>
@@ -74,7 +74,7 @@ class LooTable extends Component {
         {
           deck.length ? (
             <div style={styles.deckBack}>
-              <Card card="back" />
+              <Card back />
             </div>
           ) : null
         }

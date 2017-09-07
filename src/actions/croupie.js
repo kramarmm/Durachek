@@ -4,14 +4,15 @@ import {
   setFirstActivePlayer,
 } from '../reducers/croupie.js';
 
-export const GET_OUT = 'GET_OUT';
-export const GET_CARDS = 'GET_CARDS';
+export const SUFFLE_DECK = 'SUFFLE_DECK';
 export const GET_TRUMP_CARD = 'GET_TRUMP_CARD';
+export const GET_CARDS = 'GET_CARDS';
+export const SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER';
 
 export function getOutCards() {
   return (dispatch, getState) => {
     dispatch({
-      type: GET_OUT,
+      type: SUFFLE_DECK,
       payload: getShuffledDeck(),
     });
 
@@ -39,10 +40,8 @@ export function getOutCards() {
     });
 
     dispatch({
-      type: GET_CARDS,
-      payload: {
-        activePlayer: setFirstActivePlayer(getState().croupie),
-      },
+      type: SET_ACTIVE_PLAYER,
+      payload: setFirstActivePlayer(getState().croupie),
     });
   };
 }
