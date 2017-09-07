@@ -17,7 +17,7 @@ export default function configureStore() {
 
   if (module.hot) {
     module.hot.accept('./reducers/durachek.js', () => {
-      const nextRootReducer = require('./reducers/durachek.js');
+      const nextRootReducer = require('./reducers/durachek.js').default;
       store.replaceReducer(nextRootReducer);
     });
   }

@@ -60,14 +60,37 @@ function robotsCards(state = {}, action) {
   }
 }
 
+function activePlayer(state = '', action) {
+  switch (action.type) {
+    case GET_CARDS:
+      return action.payload.activePlayer;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   gameState,
   deck,
   trumpCard,
   usersCards,
   robotsCards,
+  activePlayer,
 });
 
-function putCardInRightOrder(cards, trump) {
-  //do something here
+// ---------- need sorting inner cards ---------- //
+const suits = ['d', 's', 'h', 'c'];
+export function putCardsInRightOrder(cards, trump) {
+  const index = suits.findIndex(s => s === trump[0][trump[0].length - 1]);
+  suits.splice(index, 1);
+  suits.unshift(trump[0][trump[0].length - 1]);
+  return suits.reduce((acc, suit) => {
+    return acc.concat(cards.filter(card => card[card.length - 1] === suit));
+  }, []);
+}
+
+export function setFirstActivePlayer(croupieState) {
+  const usersC = croupieState.usersCards.cards;
+  const robotsC = croupieState.robotsCards.cards;
+  const trump = croupieState.trumpCard[1];
 }
