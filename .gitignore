@@ -3,3 +3,4 @@ npm-debug.*.*
 npm-debug.log
 psd/
 *.js.map
+.DS_Store
