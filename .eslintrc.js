@@ -28,5 +28,6 @@ module.exports = {
     "linebreak-style": 0,
     "no-plusplus": 0,
     "arrow-body-style": 0,
+    "no-static-element-interactions": 0,
   }
 };

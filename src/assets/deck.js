@@ -1,4 +1,4 @@
-const values = ['6', '7', '8', '9', '10', '11', '12', '13', '14'];
+const values = [6, 7, 8, 9, 10, 11, 12, 13, 14];
 const suits = ['d', 's', 'h', 'c'];
 const defaultDeck = [];
 

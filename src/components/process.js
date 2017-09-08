@@ -37,6 +37,13 @@ const styles = {
     transform: 'translate(0%, -50%) rotate(9deg)',
     left: '200px',
   },
+
+  attackCards: {
+    position: 'fixed',
+    top: '50%',
+    left: '80%',
+    transform: 'translate(-50%, -50%) rotate(9deg)',
+  },
 };
 
 class LooTable extends Component {
@@ -46,7 +53,12 @@ class LooTable extends Component {
       trumpCard,
       robotsCards,
       usersCards,
+      attackCards,
     } = this.props.croupie;
+
+    const {
+      putCard,
+    } = this.props;
 
     return (
       <div>
@@ -57,7 +69,9 @@ class LooTable extends Component {
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
-                  available={robotsCards.available.indexOf(card) !== -1}
+                  onClick={putCard}
+                  available={robotsCards.availableCards
+                    && robotsCards.availableCards.indexOf(card) !== -1}
                 />
               ))
             }
@@ -69,7 +83,9 @@ class LooTable extends Component {
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
-                  available={usersCards.available.indexOf(card) !== -1}
+                  onClick={putCard}
+                  available={usersCards.availableCards
+                    && usersCards.availableCards.indexOf(card) !== -1}
                 />
               ))
             }
@@ -86,6 +102,19 @@ class LooTable extends Component {
             </div>
           ) : null
         }
+
+        <div>
+          {
+            attackCards ? (
+              attackCards.map(card => (
+                <div style={styles.attackCards} key={`${card.value}${card.suit}`}>
+                  <Card card={card} />
+                </div>
+              ))
+            ) : null
+          }
+        </div>
+
       </div>
     );
   }
@@ -100,5 +129,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  ...croupieActions,
+  croupieActions,
 )(LooTable);

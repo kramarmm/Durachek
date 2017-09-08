@@ -3,12 +3,14 @@ import {
   putCardsInRightOrder,
   setFirstActivePlayer,
   getAvailableCards,
-} from '../reducers/croupie.js';
+} from '../assets/croupie-functions.js';
 
 export const SUFFLE_DECK = 'SUFFLE_DECK';
 export const GET_TRUMP_CARD = 'GET_TRUMP_CARD';
 export const GET_CARDS = 'GET_CARDS';
 export const SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER';
+export const ROBOT_PUT_CARD = 'ROBOT_PUT_CARD';
+export const USER_PUT_CARD = 'USER_PUT_CARD';
 
 export function getOutCards() {
   return (dispatch, getState) => {
@@ -50,11 +52,28 @@ export function getOutCards() {
         activePlayer,
         playersAction,
         availableCards: getAvailableCards(
-          currentCroupieState[activePlayer].cards,
+          currentCroupieState[`${activePlayer}sCards`].cards,
           playersAction,
           currentCroupieState.attackCards,
+          currentCroupieState.trumpCard.suit,
         ),
       },
     });
+  };
+}
+
+export function putCard(card) {
+  return (dispatch, getState) => {
+    if (getState().croupie.activePlayer === 'user') {
+      dispatch({
+        type: USER_PUT_CARD,
+        payload: card,
+      });
+    } else {
+      dispatch({
+        type: ROBOT_PUT_CARD,
+        payload: card,
+      });
+    }
   };
 }
