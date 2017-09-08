@@ -2,6 +2,7 @@ import getShuffledDeck from '../assets/deck.js';
 import {
   putCardsInRightOrder,
   setFirstActivePlayer,
+  getAvailableCards,
 } from '../reducers/croupie.js';
 
 export const SUFFLE_DECK = 'SUFFLE_DECK';
@@ -39,9 +40,21 @@ export function getOutCards() {
       },
     });
 
+    const currentCroupieState = getState().croupie;
+    const activePlayer = setFirstActivePlayer(currentCroupieState);
+    const playersAction = 'attack';
+
     dispatch({
       type: SET_ACTIVE_PLAYER,
-      payload: setFirstActivePlayer(getState().croupie),
+      payload: {
+        activePlayer,
+        playersAction,
+        availableCards: getAvailableCards(
+          currentCroupieState[activePlayer].cards,
+          playersAction,
+          currentCroupieState.attackCards,
+        ),
+      },
     });
   };
 }

@@ -54,7 +54,11 @@ class LooTable extends Component {
           <div style={styles.robotsCardBlock}>
             {
               robotsCards.cards.map(card => (
-                <Card key={`${card.value}${card.suit}`} card={card} />
+                <Card
+                  key={`${card.value}${card.suit}`}
+                  card={card}
+                  available={robotsCards.available.indexOf(card) !== -1}
+                />
               ))
             }
           </div>
@@ -62,7 +66,11 @@ class LooTable extends Component {
           <div style={styles.usersCardBlock}>
             {
               usersCards.cards.map(card => (
-                <Card key={`${card.value}${card.suit}`} card={card} />
+                <Card
+                  key={`${card.value}${card.suit}`}
+                  card={card}
+                  available={usersCards.available.indexOf(card) !== -1}
+                />
               ))
             }
           </div>

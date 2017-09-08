@@ -44,6 +44,14 @@ function usersCards(state = {}, action) {
         ...state,
         cards: action.payload.usersCards || state.cards,
       };
+    case SET_ACTIVE_PLAYER:
+      if (action.payload.activePlayer === 'user') {
+        return {
+          ...state,
+          availableCards: action.payload.availableCards,
+        };
+      }
+      return state;
     default:
       return state;
   }
@@ -56,6 +64,14 @@ function robotsCards(state = {}, action) {
         ...state,
         cards: action.payload.robotsCards || state.cards,
       };
+    case SET_ACTIVE_PLAYER:
+      if (action.payload.activePlayer === 'robot') {
+        return {
+          ...state,
+          availableCards: action.payload.availableCards,
+        };
+      }
+      return state;
     default:
       return state;
   }
@@ -64,7 +80,16 @@ function robotsCards(state = {}, action) {
 function activePlayer(state = '', action) {
   switch (action.type) {
     case SET_ACTIVE_PLAYER:
-      return action.payload;
+      return action.payload.activePlayer;
+    default:
+      return state;
+  }
+}
+
+function playersAction(state = '', action) {
+  switch (action.type) {
+    case SET_ACTIVE_PLAYER:
+      return action.payload.playersAction;
     default:
       return state;
   }
@@ -77,6 +102,7 @@ export default combineReducers({
   usersCards,
   robotsCards,
   activePlayer,
+  playersAction,
 });
 
 // ---------- need sorting inner cards ---------- //
@@ -103,4 +129,8 @@ export function setFirstActivePlayer(croupieState) {
     if (card.suit === trump && card.value > maxUserCard) firstActivePlayer = 'robot';
   });
   return firstActivePlayer;
+}
+
+export function getAvailableCards(cards, playersAction, attackCards) {
+  // if ()
 }
