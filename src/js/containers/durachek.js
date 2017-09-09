@@ -8,9 +8,10 @@ import Process from '../components/process.js';
 import End from '../components/end.js';
 
 const rootStyles = {
-  color: 'white',
-  fontFamily: 'Arial',
-  backgroundColor: '#011419',
+  color: 'balck',
+  fontFamily: 'Lato',
+  fontWeight: '300',
+  backgroundColor: 'white',
 };
 
 const Durachek = props => (

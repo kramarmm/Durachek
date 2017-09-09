@@ -1,0 +1,23 @@
+#left-eye, #right-eye {
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+  width: 28px; height: 24px;
+  top: 159px;
+}
+
+#left-eye {
+  left: 147px;
+}
+
+#right-eye {
+  left: 253px;
+}
+
+#left-pupil, #right-pupil {
+  width: 8px; height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+}

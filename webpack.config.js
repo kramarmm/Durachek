@@ -1,12 +1,12 @@
-var path = require('path')
-var webpack = require('webpack')
+var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
-  devtool: "source-map",
+  devtool: 'source-map',
 
   entry: [
     'webpack-hot-middleware/client?http://localhost:3000',
-    './src/index.js'
+    './src/js/index.js',
   ],
 
   output: {
@@ -14,19 +14,27 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: 'http://localhost:3000/',
     hotUpdateChunkFilename: 'hot/[id].[hash].hot-update.js',
-    hotUpdateMainFilename: 'hot/[hash].hot-update.json'
+    hotUpdateMainFilename: 'hot/[hash].hot-update.json',
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
 
   module: {
-    loaders: [{
-      loaders: ['react-hot-loader', 'babel-loader'],
-      test: /\.js?$/,
-      include: path.join(__dirname, '/src'),
-      exclude: /(node_modules)/
-    }]
-  }
-}
+    rules: [
+      {
+        test: /\.css$/,
+        exclude: /(node_modules)/,
+        include: path.join(__dirname, '/src/css'),
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        include: path.join(__dirname, '/src/js'),
+        use: ['react-hot-loader', 'babel-loader'],
+      },
+    ],
+  },
+};

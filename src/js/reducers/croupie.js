@@ -48,6 +48,7 @@ function usersCards(state = {}, action) {
       };
     case SET_ACTIVE_PLAYER:
       if (action.payload.activePlayer === 'user') {
+        console.warn('Your move, bitch!');
         return {
           ...state,
           availableCards: action.payload.availableCards,
@@ -77,6 +78,7 @@ function robotsCards(state = {}, action) {
       };
     case SET_ACTIVE_PLAYER:
       if (action.payload.activePlayer === 'robot') {
+        console.warn('Robots move, bitch!');
         return {
           ...state,
           availableCards: action.payload.availableCards,
