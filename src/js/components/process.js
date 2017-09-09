@@ -54,6 +54,7 @@ class LooTable extends Component {
       robotsCards,
       usersCards,
       attackCards,
+      activePlayer,
     } = this.props.croupie;
 
     const {
@@ -71,7 +72,8 @@ class LooTable extends Component {
                   card={card}
                   onClick={putCard}
                   available={robotsCards.availableCards
-                    && robotsCards.availableCards.indexOf(card) !== -1}
+                    && robotsCards.availableCards.indexOf(card) !== -1
+                    && activePlayer === 'robot'}
                 />
               ))
             }
@@ -85,7 +87,8 @@ class LooTable extends Component {
                   card={card}
                   onClick={putCard}
                   available={usersCards.availableCards
-                    && usersCards.availableCards.indexOf(card) !== -1}
+                    && usersCards.availableCards.indexOf(card) !== -1
+                    && activePlayer === 'user'}
                 />
               ))
             }

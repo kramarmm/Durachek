@@ -24,8 +24,13 @@ export function setFirstActivePlayer(croupieState) {
 }
 
 export function getAvailableCards(cards, playersAction, attackCards, trumpSuit) {
+  if (!attackCards && playersAction === 'attack') {
+    return cards;
+  }
+
+  const selectedCards = [];
+
   if (attackCards && playersAction === 'defend') {
-    const selectedCards = [];
     for (let i = 0; i < attackCards.length; i++) {
       for (let j = 0; j < cards.length; j++) {
         if (cards[j].suit === trumpSuit && attackCards[i].suit !== trumpSuit) {
@@ -41,5 +46,23 @@ export function getAvailableCards(cards, playersAction, attackCards, trumpSuit) 
     }
     return selectedCards;
   }
-  return cards;
+
+  if (attackCards && playersAction === 'attack') {
+    // for (let i = 0; i < attackCards.length; i++) {
+    //   for (let j = 0; j < cards.length; j++) {
+    //     if (cards[j].suit === trumpSuit && attackCards[i].suit !== trumpSuit) {
+    //       if (selectedCards.indexOf(cards[j] === -1)) selectedCards.push(cards[j]);
+    //     }
+
+    //     if (cards[j].suit === attackCards[i].suit) {
+    //       if (cards[j].value > attackCards[i].value) {
+    //         if (selectedCards.indexOf(cards[j] === -1)) selectedCards.push(cards[j]);
+    //       }
+    //     }
+    //   }
+    // }
+    return selectedCards;
+  }
+
+  return [];
 }

@@ -67,12 +67,48 @@ export function putCard(card) {
     if (getState().croupie.activePlayer === 'user') {
       dispatch({
         type: USER_PUT_CARD,
-        payload: card,
+        payload: card, // должна быть карта и действие, для того чтоб положить а attackCards or tableCards
+      });
+
+      const currentCroupieState = getState().croupie;
+      const { playersAction, robotsCards, attackCards, trumpCard } = currentCroupieState;
+      const newPlayersAction = playersAction === 'attack' ? 'defend' : 'attack';
+
+      dispatch({
+        type: SET_ACTIVE_PLAYER,
+        payload: {
+          activePlayer: 'robot',
+          playersAction: newPlayersAction,
+          availableCards: getAvailableCards(
+            robotsCards.cards,
+            newPlayersAction,
+            attackCards,
+            trumpCard.suit,
+          ),
+        },
       });
     } else {
       dispatch({
         type: ROBOT_PUT_CARD,
         payload: card,
+      });
+
+      const currentCroupieState = getState().croupie;
+      const { playersAction, usersCards, attackCards, trumpCard } = currentCroupieState;
+      const newPlayersAction = playersAction === 'attack' ? 'defend' : 'attack';
+
+      dispatch({
+        type: SET_ACTIVE_PLAYER,
+        payload: {
+          activePlayer: 'user',
+          playersAction: newPlayersAction,
+          availableCards: getAvailableCards(
+            usersCards.cards,
+            newPlayersAction,
+            attackCards,
+            trumpCard.suit,
+          ),
+        },
       });
     }
   };
