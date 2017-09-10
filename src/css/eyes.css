@@ -3,15 +3,15 @@
   display: block;
   position: absolute;
   width: 28px; height: 24px;
-  top: 159px;
+  top: 148px;
 }
 
 #left-eye {
-  left: 147px;
+  left: 136px;
 }
 
 #right-eye {
-  left: 253px;
+  left: 235px;
 }
 
 #left-pupil, #right-pupil {

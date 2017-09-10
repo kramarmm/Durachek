@@ -6,11 +6,12 @@ import {
   SET_ACTIVE_PLAYER,
   USER_PUT_CARD,
   ROBOT_PUT_CARD,
+  START,
 } from '../actions/croupie.js';
 
 function gameState(state = 'start', action) {
   switch (action.type) {
-    case SUFFLE_DECK:
+    case START:
       return 'process';
     default:
       return state;

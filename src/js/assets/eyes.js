@@ -1,3 +1,5 @@
+import '../../css/eyes.css';
+
 let mouseX = 0;
 let mouseY = 0;
 let xp = 0;

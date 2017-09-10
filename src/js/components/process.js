@@ -17,32 +17,60 @@ const styles = {
   },
 
   robotsCardBlock: {
+    display: 'flex',
+    justifyContent: 'center',
     marginTop: '25px',
   },
 
   usersCardBlock: {
+    display: 'flex',
+    justifyContent: 'center',
     marginBottom: '25px',
   },
 
+  deck: {
+    alignSelf: 'normal',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    marginLeft: '25px',
+  },
+
   trumpCard: {
-    position: 'fixed',
-    top: '50%',
-    transform: 'translate(0%, -50%)',
-    left: '25px',
+    // display: 'inline-block',
   },
 
   deckBack: {
-    position: 'fixed',
-    top: '50%',
-    transform: 'translate(0%, -50%) rotate(9deg)',
-    left: '200px',
+    // display: 'inline-block',
   },
 
   tableCards: {
-    position: 'fixed',
-    top: '50%',
-    left: '80%',
-    transform: 'translate(-50%, -50%) rotate(9deg)',
+    marginRight: '25px',
+    marginLeft: 'calc(100% - 440px)',
+  },
+
+  defendCards: {
+    position: 'relative',
+    top: '-170px',
+    transform: 'rotate(22deg)',
+  },
+
+  buttonBlock: {
+    marginBottom: '-80px',
+  },
+
+  button: {
+    textDecoration: 'none',
+    padding: '13px 0 12px 0',
+    textTransform: 'uppercase',
+    cursor: 'pointer',
+    transition: 'all .2s',
+    backgroundColor: 'rgba(20, 225, 255, 0.42)',
+    border: 'none',
+    width: '170px',
+    fontSize: '1.5em',
+    outline: 'none',
+    letterSpacing: '0.1em',
+    color: 'white',
   },
 };
 
@@ -55,6 +83,7 @@ class LooTable extends Component {
       usersCards,
       tableCards,
       activePlayer,
+      attackCards,
       playersAction,
     } = this.props.croupie;
 
@@ -80,6 +109,46 @@ class LooTable extends Component {
             }
           </div>
 
+          <div style={styles.deck}>
+            <div style={styles.trumpCard}>
+              <Card card={trumpCard} />
+            </div>
+            {
+              deck.length ? (
+                <div style={styles.deckBack}>
+                  <Card back />
+                </div>
+              ) : null
+            }
+
+            <div style={styles.tableCards}>
+              {
+                tableCards ? (
+                  tableCards.map((card, i) => (
+                    <div
+                      key={`${card.value}${card.suit}`}
+                      style={i % 2 === 1 && attackCards.length < 2 ? styles.defendCards : {}}
+                    >
+                      <Card card={card} />
+                    </div>
+                  ))
+                ) : null
+              }
+            </div>
+          </div>
+
+          <div style={styles.buttonBlock}>
+            <button
+              style={styles.button}
+              disabled={activePlayer === 'user'}
+              className={activePlayer === 'user' ? 'available-btn' : 'disable-btn'}
+            >
+              {
+                activePlayer === 'user' && playersAction === 'attack' ? 'Отбой' : 'Взять'
+              }
+            </button>
+          </div>
+
           <div style={styles.usersCardBlock}>
             {
               usersCards.cards.map(card => (
@@ -94,43 +163,8 @@ class LooTable extends Component {
               ))
             }
           </div>
-        </div>
 
-        <div style={styles.trumpCard}>
-          <Card card={trumpCard} />
         </div>
-        {
-          deck.length ? (
-            <div style={styles.deckBack}>
-              <Card back />
-            </div>
-          ) : null
-        }
-
-        <div>
-          {
-            tableCards ? (
-              tableCards.map(card => (
-                <div style={styles.tableCards} key={`${card.value}${card.suit}`}>
-                  <Card card={card} />
-                </div>
-              ))
-            ) : null
-          }
-        </div>
-
-        <div>
-          {
-            activePlayer === 'user' ? (
-              <button>
-                {
-                  playersAction === 'attack' ? 'Отбой' : 'Взять'
-                }
-              </button>
-            ) : null
-          }
-        </div>
-
       </div>
     );
   }

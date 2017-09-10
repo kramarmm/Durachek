@@ -7,26 +7,28 @@ import Start from '../components/start.js';
 import Process from '../components/process.js';
 import End from '../components/end.js';
 
-const rootStyles = {
+const styles = {
   color: 'balck',
-  fontFamily: 'Lato',
-  fontWeight: '300',
-  backgroundColor: 'white',
+  fontFamily: 'Arial',
+  backgroundImage: 'url(images/background.png)',
+  backgroundPosition: 'center center',
 };
 
 const Durachek = props => (
-  <div style={rootStyles}>
-    {
-      props.croupie.gameState === 'start' ? (
-        <Start
-          getOutCards={props.getOutCards}
-        />
-      ) : props.croupie.gameState === 'end' ? (
-        <End />
-      ) : props.croupie.gameState === 'process' ? (
-        <Process />
-      ) : null
-    }
+  <div style={styles}>
+    <div className="wrapper">
+      {
+        props.croupie.gameState === 'start' ? (
+          <Start
+            getOutCards={props.getOutCards}
+          />
+        ) : props.croupie.gameState === 'end' ? (
+          <End />
+        ) : props.croupie.gameState === 'process' ? (
+          <Process />
+        ) : null
+      }
+    </div>
   </div>
 );
 

@@ -6,7 +6,6 @@ import Durachek from './containers/Durachek.js';
 
 import '../css/hovers.css';
 import '../css/animations.css';
-import '../css/eyes.css';
 
 render(
   <Provider store={configureStore()}>
