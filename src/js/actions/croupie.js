@@ -55,6 +55,7 @@ export function getOutCards() {
           currentCroupieState[`${activePlayer}sCards`].cards,
           playersAction,
           currentCroupieState.attackCards,
+          currentCroupieState.tableCards,
           currentCroupieState.trumpCard.suit,
         ),
       },
@@ -64,14 +65,18 @@ export function getOutCards() {
 
 export function putCard(card) {
   return (dispatch, getState) => {
-    if (getState().croupie.activePlayer === 'user') {
+    let currentCroupieState = getState().croupie;
+    if (currentCroupieState.activePlayer === 'user') {
       dispatch({
         type: USER_PUT_CARD,
-        payload: card, // должна быть карта и действие, для того чтоб положить а attackCards or tableCards
+        payload: {
+          card,
+          playersAction: currentCroupieState.playersAction,
+        }
       });
 
-      const currentCroupieState = getState().croupie;
-      const { playersAction, robotsCards, attackCards, trumpCard } = currentCroupieState;
+      currentCroupieState = getState().croupie;
+      const { playersAction, robotsCards, attackCards, tableCards, trumpCard } = currentCroupieState;
       const newPlayersAction = playersAction === 'attack' ? 'defend' : 'attack';
 
       dispatch({
@@ -83,6 +88,7 @@ export function putCard(card) {
             robotsCards.cards,
             newPlayersAction,
             attackCards,
+            tableCards,
             trumpCard.suit,
           ),
         },
@@ -90,11 +96,14 @@ export function putCard(card) {
     } else {
       dispatch({
         type: ROBOT_PUT_CARD,
-        payload: card,
+        payload: {
+          card,
+          playersAction: currentCroupieState.playersAction,
+        }
       });
 
-      const currentCroupieState = getState().croupie;
-      const { playersAction, usersCards, attackCards, trumpCard } = currentCroupieState;
+      currentCroupieState = getState().croupie;
+      const { playersAction, usersCards, attackCards, tableCards, trumpCard } = currentCroupieState;
       const newPlayersAction = playersAction === 'attack' ? 'defend' : 'attack';
 
       dispatch({
@@ -106,6 +115,7 @@ export function putCard(card) {
             usersCards.cards,
             newPlayersAction,
             attackCards,
+            tableCards,
             trumpCard.suit,
           ),
         },

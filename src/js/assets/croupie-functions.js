@@ -23,14 +23,11 @@ export function setFirstActivePlayer(croupieState) {
   return firstActivePlayer;
 }
 
-export function getAvailableCards(cards, playersAction, attackCards, trumpSuit) {
-  if (!attackCards && playersAction === 'attack') {
-    return cards;
-  }
-
+export function getAvailableCards(cards, playersAction, attackCards, tableCards, trumpSuit) {
   const selectedCards = [];
 
-  if (attackCards && playersAction === 'defend') {
+  if (attackCards.length && playersAction === 'defend') {
+    // здесь возможно для attackCards цикл не нужен, а брать только [0]
     for (let i = 0; i < attackCards.length; i++) {
       for (let j = 0; j < cards.length; j++) {
         if (cards[j].suit === trumpSuit && attackCards[i].suit !== trumpSuit) {
@@ -47,21 +44,17 @@ export function getAvailableCards(cards, playersAction, attackCards, trumpSuit) 
     return selectedCards;
   }
 
-  if (attackCards && playersAction === 'attack') {
-    // for (let i = 0; i < attackCards.length; i++) {
-    //   for (let j = 0; j < cards.length; j++) {
-    //     if (cards[j].suit === trumpSuit && attackCards[i].suit !== trumpSuit) {
-    //       if (selectedCards.indexOf(cards[j] === -1)) selectedCards.push(cards[j]);
-    //     }
-
-    //     if (cards[j].suit === attackCards[i].suit) {
-    //       if (cards[j].value > attackCards[i].value) {
-    //         if (selectedCards.indexOf(cards[j] === -1)) selectedCards.push(cards[j]);
-    //       }
-    //     }
-    //   }
-    // }
+  if (tableCards.length && playersAction === 'attack') {
+    for (let i = 0; i < tableCards.length; i++) {
+      for (let j = 0; j < cards.length; j++) {
+        if (cards[j].value === tableCards[i].value) selectedCards.push(cards[j]);
+      }
+    }
     return selectedCards;
+  }
+
+  if (!attackCards.length && playersAction === 'attack') {
+    return cards;
   }
 
   return [];

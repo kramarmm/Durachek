@@ -56,7 +56,7 @@ function usersCards(state = {}, action) {
       }
       return state;
     case USER_PUT_CARD:
-      const index = state.cards.findIndex(card => action.payload === card);
+      const index = state.cards.findIndex(card => action.payload.card === card);
       return {
         ...state,
         cards: [
@@ -86,7 +86,7 @@ function robotsCards(state = {}, action) {
       }
       return state;
     case ROBOT_PUT_CARD:
-      const index = state.cards.findIndex(card => action.payload === card);
+      const index = state.cards.findIndex(card => action.payload.card === card);
       return {
         ...state,
         cards: [
@@ -120,9 +120,26 @@ function playersAction(state = '', action) {
 function attackCards(state = [], action) {
   switch (action.type) {
     case USER_PUT_CARD:
-      return [...state, action.payload];
+      if (action.payload.playersAction === 'attack') {
+        return [...state, action.payload.card];
+      }
+      return [];
     case ROBOT_PUT_CARD:
-      return [...state, action.payload];
+      if (action.payload.playersAction === 'attack') {
+        return [...state, action.payload.card];
+      }
+      return [];
+    default:
+      return state;
+  }
+}
+
+function tableCards(state = [], action) {
+  switch (action.type) {
+    case USER_PUT_CARD:
+      return [...state, action.payload.card];
+    case ROBOT_PUT_CARD:
+      return [...state, action.payload.card];
     default:
       return state;
   }
@@ -137,4 +154,5 @@ export default combineReducers({
   activePlayer,
   playersAction,
   attackCards,
+  tableCards,
 });

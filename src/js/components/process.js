@@ -38,7 +38,7 @@ const styles = {
     left: '200px',
   },
 
-  attackCards: {
+  tableCards: {
     position: 'fixed',
     top: '50%',
     left: '80%',
@@ -53,7 +53,7 @@ class LooTable extends Component {
       trumpCard,
       robotsCards,
       usersCards,
-      attackCards,
+      tableCards,
       activePlayer,
     } = this.props.croupie;
 
@@ -108,9 +108,9 @@ class LooTable extends Component {
 
         <div>
           {
-            attackCards ? (
-              attackCards.map(card => (
-                <div style={styles.attackCards} key={`${card.value}${card.suit}`}>
+            tableCards ? (
+              tableCards.map(card => (
+                <div style={styles.tableCards} key={`${card.value}${card.suit}`}>
                   <Card card={card} />
                 </div>
               ))
