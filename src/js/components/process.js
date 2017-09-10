@@ -55,6 +55,7 @@ class LooTable extends Component {
       usersCards,
       tableCards,
       activePlayer,
+      playersAction,
     } = this.props.croupie;
 
     const {
@@ -114,6 +115,18 @@ class LooTable extends Component {
                   <Card card={card} />
                 </div>
               ))
+            ) : null
+          }
+        </div>
+
+        <div>
+          {
+            activePlayer === 'user' ? (
+              <button>
+                {
+                  playersAction === 'attack' ? 'Отбой' : 'Взять'
+                }
+              </button>
             ) : null
           }
         </div>
