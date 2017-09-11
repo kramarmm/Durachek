@@ -32,25 +32,26 @@ const styles = {
     alignSelf: 'normal',
     display: 'flex',
     justifyContent: 'flex-start',
-    marginLeft: '25px',
+    maxHeight: '180px',
   },
 
   trumpCard: {
-    // display: 'inline-block',
+    marginLeft: '45px',
   },
 
   deckBack: {
-    // display: 'inline-block',
+    transform: 'translate(-100%, 25%) rotate(98deg)',
   },
 
   tableCards: {
     marginRight: '25px',
-    marginLeft: 'calc(100% - 440px)',
+    marginLeft: 'calc(60% - 440px)',
+    display: 'flex',
   },
 
   defendCards: {
     position: 'relative',
-    top: '-170px',
+    left: '-85px',
     transform: 'rotate(22deg)',
   },
 
@@ -127,7 +128,7 @@ class LooTable extends Component {
                   tableCards.map((card, i) => (
                     <div
                       key={`${card.value}${card.suit}`}
-                      style={i % 2 === 1 && attackCards.length < 2 ? styles.defendCards : {}}
+                      style={i % 2 === 1 && attackCards.length < 2 ? styles.defendCards : { margin: '0 -50px' }}
                     >
                       <Card card={card} />
                     </div>
