@@ -12,6 +12,8 @@ export const GET_CARDS = 'GET_CARDS';
 export const SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER';
 export const ROBOT_PUT_CARD = 'ROBOT_PUT_CARD';
 export const USER_PUT_CARD = 'USER_PUT_CARD';
+export const END_OF_TURN = 'END_OF_TURN';
+export const TAKE_ALL_TABLE_CARDS = 'TAKE_ALL_TABLE_CARDS';
 
 export function getOutCards() {
   return (dispatch, getState) => {
@@ -124,5 +126,25 @@ export function putCard(card) {
         },
       });
     }
+  };
+}
+
+export function setEndOfTurn() {
+  return (dispatch, getState) => {
+    dispatch({
+      type: END_OF_TURN,
+    });
+  };
+}
+
+export function takeAllTableCards() {
+  return (dispatch, getState) => {
+    const state = getState().croupie;
+    if (state.activePlayer === 'robot') {
+      console.warn('robot get card');
+    }
+    dispatch({
+      type: TAKE_ALL_TABLE_CARDS,
+    });
   };
 }

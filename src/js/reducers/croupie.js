@@ -7,6 +7,8 @@ import {
   USER_PUT_CARD,
   ROBOT_PUT_CARD,
   START,
+  END_OF_TURN,
+  TAKE_ALL_TABLE_CARDS,
 } from '../actions/croupie.js';
 
 function gameState(state = 'start', action) {
@@ -130,6 +132,9 @@ function attackCards(state = [], action) {
         return [...state, action.payload.card];
       }
       return [];
+    case END_OF_TURN:
+    case TAKE_ALL_TABLE_CARDS:
+      return [];
     default:
       return state;
   }
@@ -141,6 +146,9 @@ function tableCards(state = [], action) {
       return [...state, action.payload.card];
     case ROBOT_PUT_CARD:
       return [...state, action.payload.card];
+    case END_OF_TURN:
+    case TAKE_ALL_TABLE_CARDS:
+      return [];
     default:
       return state;
   }

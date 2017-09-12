@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Card from './card.js';
+import Button from './button.js';
 
 import * as croupieActions from '../actions/croupie.js';
 
@@ -90,6 +91,8 @@ class LooTable extends Component {
 
     const {
       putCard,
+      setEndOfTurn,
+      takeAllTableCards,
     } = this.props;
 
     return (
@@ -139,15 +142,25 @@ class LooTable extends Component {
           </div>
 
           <div style={styles.buttonBlock}>
-            <button
-              style={styles.button}
-              disabled={activePlayer === 'user'}
-              className={activePlayer === 'user' ? 'available-btn' : 'disable-btn'}
-            >
-              {
-                activePlayer === 'user' && playersAction === 'attack' ? 'Отбой' : 'Взять'
-              }
-            </button>
+            {
+              (activePlayer === 'user' && playersAction === 'attack') ||
+              (activePlayer === 'robot' && playersAction === 'defend') ? (
+                <Button
+                  name="Отбой"
+                  styles={styles.button}
+                  onClick={setEndOfTurn}
+                  activePlayer={activePlayer}
+                />
+              ) : (activePlayer === 'user' && playersAction === 'defend') ||
+              (activePlayer === 'robot' && playersAction === 'attack') ? (
+                <Button
+                  name="Взять"
+                  styles={styles.button}
+                  onClick={takeAllTableCards}
+                  activePlayer={activePlayer}
+                />
+              ) : null
+            }
           </div>
 
           <div style={styles.usersCardBlock}>
