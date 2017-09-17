@@ -5,15 +5,24 @@ import DurachekReducer from './reducers/durachek.js';
 // here i can past my API for third parameter in actions
 //   applyMiddleware(thunk.withExtraArgument(api))
 
+let store = {};
+
 /* eslint-disable */
 export default function configureStore() {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  const store = createStore(
+  if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+    store = createStore(
+        DurachekReducer,
+        composeEnhancers(
+            applyMiddleware(thunk),
+        ),
+    );
+  } else {
+    store = createStore(
       DurachekReducer,
-      composeEnhancers(
-          applyMiddleware(thunk),
-      ),
-  );
+      applyMiddleware(thunk),
+    );
+  }
 
   if (module.hot) {
     module.hot.accept('./reducers/durachek.js', () => {
