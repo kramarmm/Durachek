@@ -63,7 +63,7 @@ export default function Card(props) {
   if (props.back) {
     return (
       <div style={styles.card}>
-        <img src="images/back.png" alt="back" />
+        <img src="images/back.png" alt="back" height="100%" width="100%" />
       </div>
     );
   }
