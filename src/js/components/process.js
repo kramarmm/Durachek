@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Card from './card.js';
 import Button from './button.js';
+import Messages from './messages.js';
 
 import * as croupieActions from '../actions/croupie.js';
 
@@ -87,6 +88,7 @@ class LooTable extends Component {
       activePlayer,
       attackCards,
       playersAction,
+      messages,
     } = this.props.croupie;
 
     const {
@@ -108,6 +110,8 @@ class LooTable extends Component {
               ))
             }
           </div>
+
+          <Messages messages={messages} />
 
           <div style={styles.deck}>
             <div style={styles.trumpCard}>

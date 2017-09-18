@@ -51,7 +51,6 @@ function usersCards(state = {}, action) {
       };
     case SET_ACTIVE_PLAYER:
       if (action.payload.activePlayer === 'user') {
-        console.warn('Your move, bitch!');
         return {
           ...state,
           availableCards: action.payload.availableCards,
@@ -81,7 +80,6 @@ function robotsCards(state = {}, action) {
       };
     case SET_ACTIVE_PLAYER:
       if (action.payload.activePlayer === 'robot') {
-        console.warn('Robots move, bitch!');
         return {
           ...state,
           availableCards: action.payload.availableCards,
@@ -97,6 +95,17 @@ function robotsCards(state = {}, action) {
           ...state.cards.slice(index + 1),
         ],
       };
+    case TAKE_ALL_TABLE_CARDS:
+      if (action.payload.activePlayer === 'robot') {
+        return {
+          ...state,
+          cards: {
+            ...state.cards,
+            ...action.payload.cards,
+          },
+        };
+      }
+      return state;
     default:
       return state;
   }
@@ -154,6 +163,33 @@ function tableCards(state = [], action) {
   }
 }
 
+function messages(state = [], action) {
+  switch (action.type) {
+    case START:
+      return [...state, 'game is begun, bitch!'];
+    case SET_ACTIVE_PLAYER:
+      if (action.payload.activePlayer === 'robot') {
+        return [...state, 'robots move, bitch!'];
+      } else {
+        return [...state, 'your move, bitch!'];
+      }
+    case ROBOT_PUT_CARD:
+      return [...state, 'robot put card, bitch!'];
+    case USER_PUT_CARD:
+      return [...state, 'you put card, bitch!'];
+    case END_OF_TURN:
+      return [...state, 'end of turn, bitch!'];
+    case TAKE_ALL_TABLE_CARDS:
+      if (action.payload.activePlayer === 'robot') {
+        return [...state, 'robots all cards, bitch!'];
+      } else {
+        return [...state, 'your all cards, bitch!'];
+      }
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   gameState,
   deck,
@@ -164,4 +200,5 @@ export default combineReducers({
   playersAction,
   attackCards,
   tableCards,
+  messages,
 });

@@ -16,7 +16,7 @@
     background-color: rgba(0, 0, 0, 0);
   }
   100% {
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -36,5 +36,30 @@
 
 .fade-out {
   animation: fade-out .4s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes msg-animation {
+  0% {
+    opacity: 0;
+    transform: translate(-40px, 0);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  95% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    display: none;
+  }
+}
+
+.msg-animation {
+  animation: msg-animation 3s;
   animation-fill-mode: forwards;
 }
