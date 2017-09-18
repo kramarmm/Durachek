@@ -66,6 +66,17 @@ function usersCards(state = {}, action) {
           ...state.cards.slice(index + 1, state.cards.length),
         ],
       };
+    case TAKE_ALL_TABLE_CARDS:
+      if (action.payload.activePlayer === 'user') {
+        return {
+          ...state,
+          cards: [
+            ...state.cards,
+            ...action.payload.cards,
+          ],
+        };
+      }
+      return state;
     default:
       return state;
   }
@@ -99,10 +110,10 @@ function robotsCards(state = {}, action) {
       if (action.payload.activePlayer === 'robot') {
         return {
           ...state,
-          cards: {
+          cards: [
             ...state.cards,
             ...action.payload.cards,
-          },
+          ],
         };
       }
       return state;
@@ -165,14 +176,11 @@ function tableCards(state = [], action) {
 
 function messages(state = [], action) {
   switch (action.type) {
-    case START:
-      return [...state, 'game is begun, bitch!'];
     case SET_ACTIVE_PLAYER:
-      if (action.payload.activePlayer === 'robot') {
-        return [...state, 'robots move, bitch!'];
-      } else {
+      if (action.payload.activePlayer === 'user') {
         return [...state, 'your move, bitch!'];
       }
+      return state;
     case ROBOT_PUT_CARD:
       return [...state, 'robot put card, bitch!'];
     case USER_PUT_CARD:

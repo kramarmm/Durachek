@@ -5,6 +5,8 @@ import {
   getAvailableCards,
 } from '../assets/croupie-functions.js';
 
+import transferControlToRobot from './robot.js';
+
 export const START = 'START';
 export const SUFFLE_DECK = 'SUFFLE_DECK';
 export const GET_TRUMP_CARD = 'GET_TRUMP_CARD';
@@ -14,6 +16,11 @@ export const ROBOT_PUT_CARD = 'ROBOT_PUT_CARD';
 export const USER_PUT_CARD = 'USER_PUT_CARD';
 export const END_OF_TURN = 'END_OF_TURN';
 export const TAKE_ALL_TABLE_CARDS = 'TAKE_ALL_TABLE_CARDS';
+
+export const user = 'user';
+export const robot = 'robot';
+export const attack = 'attack';
+export const defend = 'defend';
 
 export function getOutCards() {
   return (dispatch, getState) => {
@@ -47,7 +54,7 @@ export function getOutCards() {
 
     const currentCroupieState = getState().croupie;
     const activePlayer = setFirstActivePlayer(currentCroupieState);
-    const playersAction = 'attack';
+    const playersAction = attack;
 
     dispatch({
       type: SET_ACTIVE_PLAYER,
@@ -64,6 +71,10 @@ export function getOutCards() {
       },
     });
 
+    if (activePlayer === robot) {
+      transferControlToRobot(dispatch, getState);
+    }
+
     setTimeout(() => dispatch({ type: START }), 400);
   };
 }
@@ -71,23 +82,23 @@ export function getOutCards() {
 export function putCard(card) {
   return (dispatch, getState) => {
     let currentCroupieState = getState().croupie;
-    if (currentCroupieState.activePlayer === 'user') {
+    if (currentCroupieState.activePlayer === user) {
       dispatch({
         type: USER_PUT_CARD,
         payload: {
           card,
           playersAction: currentCroupieState.playersAction,
-        }
+        },
       });
 
       currentCroupieState = getState().croupie;
       const { playersAction, robotsCards, attackCards, tableCards, trumpCard } = currentCroupieState;
-      const newPlayersAction = playersAction === 'attack' ? 'defend' : 'attack';
+      const newPlayersAction = playersAction === attack ? defend : attack;
 
       dispatch({
         type: SET_ACTIVE_PLAYER,
         payload: {
-          activePlayer: 'robot',
+          activePlayer: robot,
           playersAction: newPlayersAction,
           availableCards: getAvailableCards(
             robotsCards.cards,
@@ -98,33 +109,7 @@ export function putCard(card) {
           ),
         },
       });
-    } else {
-      dispatch({
-        type: ROBOT_PUT_CARD,
-        payload: {
-          card,
-          playersAction: currentCroupieState.playersAction,
-        }
-      });
-
-      currentCroupieState = getState().croupie;
-      const { playersAction, usersCards, attackCards, tableCards, trumpCard } = currentCroupieState;
-      const newPlayersAction = playersAction === 'attack' ? 'defend' : 'attack';
-
-      dispatch({
-        type: SET_ACTIVE_PLAYER,
-        payload: {
-          activePlayer: 'user',
-          playersAction: newPlayersAction,
-          availableCards: getAvailableCards(
-            usersCards.cards,
-            newPlayersAction,
-            attackCards,
-            tableCards,
-            trumpCard.suit,
-          ),
-        },
-      });
+      transferControlToRobot(dispatch, getState);
     }
   };
 }
@@ -140,10 +125,10 @@ export function setEndOfTurn() {
 export function takeAllTableCards() {
   return (dispatch, getState) => {
     const state = getState().croupie;
-    if (state.activePlayer === 'robot') {
+    if (state.activePlayer === robot) {
       const availableCards = getAvailableCards(
         state.usersCards.cards,
-        'attack',
+        attack,
         state.attackCards,
         state.tableCards,
         state.trumpCard.suit,
@@ -154,14 +139,14 @@ export function takeAllTableCards() {
         dispatch({
           type: TAKE_ALL_TABLE_CARDS,
           payload: {
-            activePlayer: 'robot',
+            activePlayer: robot,
             cards: state.tableCards,
           },
         });
         dispatch({
           type: END_OF_TURN,
           payload: {
-            activePlayer: 'robot',
+            activePlayer: robot,
             cards: state.tableCards,
           },
         });
@@ -169,4 +154,25 @@ export function takeAllTableCards() {
       }
     }
   };
+}
+
+export function transferControlFromRobot(dispatch, getState) {
+  const currentCroupieState = getState().croupie;
+  const { playersAction, usersCards, attackCards, tableCards, trumpCard } = currentCroupieState;
+  const newPlayersAction = playersAction === attack ? defend : attack;
+
+  dispatch({
+    type: SET_ACTIVE_PLAYER,
+    payload: {
+      activePlayer: user,
+      playersAction: newPlayersAction,
+      availableCards: getAvailableCards(
+        usersCards.cards,
+        newPlayersAction,
+        attackCards,
+        tableCards,
+        trumpCard.suit,
+      ),
+    },
+  });
 }

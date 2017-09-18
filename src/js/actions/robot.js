@@ -7,6 +7,8 @@ import {
   END_OF_TURN,
   TAKE_ALL_TABLE_CARDS,
   transferControlFromRobot,
+  robot,
+  attack,
 } from './croupie.js';
 
 export default function transferControlToRobot(dispatch, getState) {
@@ -20,11 +22,18 @@ export default function transferControlToRobot(dispatch, getState) {
       },
     });
   } else {
-    if (state.playersAction === 'attack') {
+    if (state.playersAction === attack) {
       dispatch({ type: END_OF_TURN });
     } else {
-      dispatch({ type: TAKE_ALL_TABLE_CARDS });
+      dispatch({
+        type: TAKE_ALL_TABLE_CARDS,
+        payload: {
+          activePlayer: robot,
+          cards: state.tableCards,
+        },
+      });
     }
   }
+
   transferControlFromRobot(dispatch, getState);
 }

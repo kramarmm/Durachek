@@ -18,7 +18,7 @@ export default function Messages(props) {
       {
         props.messages.map((msg, i) => (
           <div
-            key={Math.random()}
+            key={i}
             className="msg-animation"
             style={{
               animationDelay: `${i * 0.4}s`,

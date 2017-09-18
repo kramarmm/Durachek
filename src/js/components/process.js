@@ -92,7 +92,7 @@ class LooTable extends Component {
     } = this.props.croupie;
 
     const {
-      userPutCard,
+      putCard,
       setEndOfTurn,
       takeAllTableCards,
     } = this.props;
@@ -169,7 +169,7 @@ class LooTable extends Component {
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
-                  onClick={userPutCard}
+                  onClick={putCard}
                   available={usersCards.availableCards
                     && usersCards.availableCards.indexOf(card) !== -1
                     && activePlayer === 'user'}
