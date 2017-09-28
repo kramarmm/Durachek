@@ -7,6 +7,13 @@ import {
 
 import transferControlToRobot from './robot.js';
 
+import {
+  robot,
+  user,
+  defend,
+  attack,
+} from '../assets/consts.js';
+
 export const START = 'START';
 export const SUFFLE_DECK = 'SUFFLE_DECK';
 export const GET_TRUMP_CARD = 'GET_TRUMP_CARD';
@@ -16,11 +23,6 @@ export const ROBOT_PUT_CARD = 'ROBOT_PUT_CARD';
 export const USER_PUT_CARD = 'USER_PUT_CARD';
 export const END_OF_TURN = 'END_OF_TURN';
 export const TAKE_ALL_TABLE_CARDS = 'TAKE_ALL_TABLE_CARDS';
-
-export const user = 'user';
-export const robot = 'robot';
-export const attack = 'attack';
-export const defend = 'defend';
 
 export function getOutCards() {
   return (dispatch, getState) => {
@@ -124,34 +126,24 @@ export function setEndOfTurn() {
 
 export function takeAllTableCards() {
   return (dispatch, getState) => {
-    const state = getState().croupie;
-    if (state.activePlayer === robot) {
-      const availableCards = getAvailableCards(
-        state.usersCards.cards,
-        attack,
-        state.attackCards,
-        state.tableCards,
-        state.trumpCard.suit,
-      );
-      if (availableCards) {
-        console.warn('robot get card, you may to put another');
-      } else {
-        dispatch({
-          type: TAKE_ALL_TABLE_CARDS,
-          payload: {
-            activePlayer: robot,
-            cards: state.tableCards,
-          },
-        });
-        dispatch({
-          type: END_OF_TURN,
-          payload: {
-            activePlayer: robot,
-            cards: state.tableCards,
-          },
-        });
-        console.warn('robot get card, you CANNOT PUT ANOTHER');
-      }
+    const { activePlayer, tableCards } = getState().croupie.state;
+    if (activePlayer === robot) {
+      transferControlToRobot(dispatch, getState);
+    } else {
+      dispatch({
+        type: TAKE_ALL_TABLE_CARDS,
+        payload: {
+          activePlayer: robot,
+          cards: tableCards,
+        },
+      });
+      dispatch({
+        type: END_OF_TURN,
+        payload: {
+          activePlayer: robot,
+          cards: tableCards,
+        },
+      });
     }
   };
 }

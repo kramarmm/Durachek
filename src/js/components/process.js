@@ -7,6 +7,13 @@ import Messages from './messages.js';
 
 import * as croupieActions from '../actions/croupie.js';
 
+import {
+  robot,
+  user,
+  defend,
+  attack,
+} from '../assets/consts.js';
+
 const styles = {
   LooTable: {
     display: 'flex',
@@ -97,6 +104,12 @@ class LooTable extends Component {
       takeAllTableCards,
     } = this.props;
 
+    const userMayGetCards = activePlayer === robot && playersAction === attack ||
+      activePlayer === user && playersAction === defend;
+
+    const userMayFinishTurn = activePlayer === user && playersAction === attack ||
+      activePlayer === robot && playersAction === defend;
+
     return (
       <div>
         <div style={styles.LooTable}>
@@ -143,19 +156,19 @@ class LooTable extends Component {
 
           <div style={styles.buttonBlock}>
             {
-              (activePlayer === 'user' && playersAction === 'attack') ||
-              (activePlayer === 'robot' && playersAction === 'defend') ? (
+              (userMayGetCards) ? (
                 <Button
                   name="Отбой"
-                  styles={styles.button}
+                  styles={activePlayer === user && playersAction === attack ?
+                    styles.button : styles.buttonDisabled}
                   onClick={setEndOfTurn}
                   activePlayer={activePlayer}
                 />
-              ) : (activePlayer === 'user' && playersAction === 'defend') ||
-              (activePlayer === 'robot' && playersAction === 'attack') ? (
+              ) : (userMayFinishTurn) ? (
                 <Button
                   name="Взять"
-                  styles={styles.button}
+                  styles={activePlayer === user && playersAction === defend ?
+                    styles.button : styles.buttonDisabled}
                   onClick={takeAllTableCards}
                   activePlayer={activePlayer}
                 />
