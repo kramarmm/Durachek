@@ -55,9 +55,6 @@ const styles = {
   robotBlock: {
     width: '50%',
   },
-
-  innerRobotBlock: {
-  },
 };
 
 export default function Start(props) {
