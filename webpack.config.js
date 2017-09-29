@@ -24,9 +24,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.less$/,
         exclude: /(node_modules)/,
-        include: path.join(__dirname, '/src/css'),
+        include: [
+          path.join(__dirname, '/src/css'),
+        ],
         use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
       },
       {

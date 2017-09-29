@@ -4,8 +4,7 @@ import { Provider } from 'react-redux';
 import configureStore from './configureStore';
 import Durachek from './containers/Durachek.js';
 
-import '../css/hovers.css';
-import '../css/animations.css';
+import '../css/index.less';
 
 render(
   <Provider store={configureStore()}>
