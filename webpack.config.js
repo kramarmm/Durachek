@@ -35,7 +35,16 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules)/,
         include: path.join(__dirname, '/src/js'),
-        use: ['react-hot-loader', 'babel-loader'],
+        use: ['react-hot-loader/webpack', 'babel-loader'],
+      },
+      {
+        test: /\.(png|jpg|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: { name: '[path][name].[ext]' },
+          },
+        ],
       },
     ],
   },
