@@ -1,20 +1,8 @@
 import React from 'react';
 
-const styles = {
-  messagesBlock: {
-    position: 'absolute',
-    top: '225px',
-    width: '803px',
-    textAlign: 'end',
-    color: 'white',
-    letterSpacing: '.1em',
-    textTransform: 'uppercase',
-  },
-};
-
 export default function Messages(props) {
   return (
-    <div style={styles.messagesBlock}>
+    <div className="messages-block">
       {
         props.messages.map((msg, i) => (
           <div

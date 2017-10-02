@@ -12,69 +12,21 @@ const cardValuesRef = {
   14: 'A',
 };
 
-const styles = {
-  card: {
-    height: '160px',
-    width: '110px',
-    backgroundColor: 'white',
-    boxShadow: 'rgba(0, 0, 0, 0.08) -3px 4px 4px, rgba(0, 0, 0, 0.24) 0px 1px 8px',
-    margin: '0 5px',
-    borderRadius: '5px',
-    padding: '8px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-
-  available: {
-    cursor: 'pointer',
-    transform: 'translate(0%, -10%)',
-    transition: 'transform .2s',
-  },
-
-  cardValue: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    maxWidth: '17px',
-  },
-
-  cardValueReverse: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    maxWidth: '17px',
-    alignSelf: 'flex-end',
-    transform: 'rotate(180deg)',
-  },
-
-  suit: {
-    width: '15px',
-  },
-
-  bigSuit: {
-    width: '50px',
-    alignSelf: 'center',
-    opacity: '.5',
-  },
-};
-
 export default function Card(props) {
   if (props.back) {
     return (
-      <div style={styles.card}>
+      <div className="card">
         <img src="images/back.png" alt="back" height="100%" width="100%" />
       </div>
     );
   }
   return (
     <span
-      style={props.available ? styles.available : null}
       onClick={props.available && props.onClick ? () => props.onClick(props.card) : null}
-      className={props.available ? 'available-card' : ''}
+      className={props.available ? 'available' : ''}
     >
-      <div style={styles.card}>
-        <div style={styles.cardValue}>
+      <div className="card">
+        <div className="card-value">
           <div
             style={{
               color: props.card.suit === 'c' || props.card.suit === 's' ? '#00171B' : '#F00D44',
@@ -86,17 +38,17 @@ export default function Card(props) {
           <img
             src={`images/${props.card.suit}.svg`}
             alt={props.card.suit}
-            style={styles.suit}
+            className="suit"
           />
         </div>
 
         <img
           src={`images/${props.card.suit}.svg`}
           alt={props.card.suit}
-          style={styles.bigSuit}
+          className="big-suit"
         />
 
-        <div style={styles.cardValueReverse}>
+        <div className="card-value-reverse">
           <div
             style={{
               color: props.card.suit === 'c' || props.card.suit === 's' ? '#00171B' : '#F00D44',
@@ -108,7 +60,7 @@ export default function Card(props) {
           <img
             src={`images/${props.card.suit}.svg`}
             alt={props.card.suit}
-            style={styles.suit}
+            className="suit"
           />
         </div>
       </div>
