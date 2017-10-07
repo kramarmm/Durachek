@@ -1,102 +1,52 @@
-import React from 'react';
+import React, { Component } from 'react';
+import eyesMoving from '../assets/eyes.js';
 
-import moveEyes from '../assets/eyes.js';
+export default class Start extends Component {
+  constructor(props) {
+    super(props);
+    this.startGame = this.startGame.bind(this);
+  }
 
-const styles = {
-  mainBlock: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    width: '100vw',
-  },
+  componentDidMount() {
+    eyesMoving();
+  }
 
-  contentBlock: {
-    height: '60vh',
-    width: '65vw',
-    boxShadow: 'rgba(0, 0, 0, 0.08) -3px 4px 4px, rgba(0, 0, 0, 0.24) 0px 1px 8px',
-    backgroundColor: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  startGame() {
+    document.querySelector('.wrapper').classList.add('darken');
+    document.querySelector('.start-block').classList.add('fade-out');
+    this.props.getOutCards();
+  }
 
-  textBlock: {
-    margin: '0 50px',
-    width: '50%',
-  },
+  render() {
+    return (
+      <div className="main-block start-block">
+        <div className="content-block">
 
-  helloText: {
-    backgroundImage: 'url(images/hello-text.svg)',
-    backgroundRepeat: 'no-repeat',
-    width: '100%',
-    maxWidth: '415px',
-    height: '0',
-    padding: '0',
-    paddingBottom: 'calc(100% * 1.95 / 4.5)',
-  },
+          <div className="text-block">
+            <div className="hello-text" />
 
-  startBtn: {
-    textDecoration: 'none',
-    backgroundColor: 'white',
-    border: '2px solid #5c5c5c',
-    padding: '13px 0 12px 0',
-    textTransform: 'uppercase',
-    fontSize: '29px',
-    marginTop: '60px',
-    color: '#5c5c5c',
-    cursor: 'pointer',
-    transition: 'all .2s',
-    width: '100%',
-    maxWidth: '415px',
-    outline: 'none',
-  },
-
-  robotBlock: {
-    width: '50%',
-  },
-};
-
-export default function Start(props) {
-  return (
-    <div style={styles.mainBlock} className="start-block">
-      <div style={styles.contentBlock}>
-
-        <div style={styles.textBlock}>
-          <div style={styles.helloText} />
-
-          <button
-            style={styles.startBtn}
-            onClick={() => {
-              document.querySelector('.wrapper').classList.add('darken');
-              document.querySelector('.start-block').classList.add('fade-out');
-              props.getOutCards();
-            }}
-            className="start-game-btn"
-          >
-            начать игру
-          </button>
-        </div>
-
-        <div style={styles.robotBlock} className="robot-levitation">
-          <div style={styles.innerRobotBlock}>
-            <div id="left-eye">
-              <div id="left-pupil" />
-            </div>
-            <div id="right-eye">
-              <div id="right-pupil" />
-            </div>
-            <img src="images/robot.svg" alt="robot" />
+            <button
+              className="start-btn"
+              onClick={this.startGame}
+            >
+              начать игру
+            </button>
           </div>
+
+          <div className="robot-text robot-levitation">
+            <div>
+              <div id="left-eye">
+                <div id="left-pupil" />
+              </div>
+              <div id="right-eye">
+                <div id="right-pupil" />
+              </div>
+              <img src="images/robot.svg" alt="robot" />
+            </div>
+          </div>
+
         </div>
-
       </div>
-    </div>
-  );
+    );
+  }
 }
-
-function eyes() {
-  moveEyes();
-  requestAnimationFrame(eyes);
-}
-eyes();

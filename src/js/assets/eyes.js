@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-export default function moveEyes() {
+function moveEyes() {
   xp += Math.round((mouseX - xp) / 5);
   yp += Math.round((mouseY - yp) / 5);
   if (pupils.left && pupils.right) {
@@ -33,4 +33,9 @@ export default function moveEyes() {
     pupils.left.style.top = `${yp}px`;
     pupils.right.style.top = `${yp}px`;
   }
+}
+
+export default function eyesMoving() {
+  moveEyes();
+  requestAnimationFrame(eyesMoving);
 }

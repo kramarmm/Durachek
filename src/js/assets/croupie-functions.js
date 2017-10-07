@@ -1,4 +1,11 @@
+import { defend, attack } from '../assets/consts.js';
+
 const suits = ['d', 's', 'h', 'c'];
+
+export function togglePlayersActions(current) {
+  return current === attack ? defend : attack;
+}
+
 export function putCardsInRightOrder(cards, trump) {
   const index = suits.findIndex(s => s === trump[0].suit);
   suits.splice(index, 1);
@@ -23,7 +30,13 @@ export function setFirstActivePlayer(croupieState) {
   return firstActivePlayer;
 }
 
-export function getAvailableCards(cards, playersAction, attackCards, tableCards, trumpSuit) {
+export function getAvailableCards(croupieState, currentActivePlayer) {
+  const { attackCards, tableCards } = croupieState;
+  const activePlayer = currentActivePlayer || croupieState.activePlayer;
+  const cards = croupieState[`${activePlayer}sCards`].cards;
+  const playersAction = togglePlayersActions(croupieState.playersAction);
+  const trumpSuit = croupieState.trumpCard.suit;
+
   const selectedCards = [];
 
   if (attackCards.length && playersAction === 'defend') {

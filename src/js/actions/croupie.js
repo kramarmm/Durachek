@@ -3,6 +3,7 @@ import {
   putCardsInRightOrder,
   setFirstActivePlayer,
   getAvailableCards,
+  togglePlayersActions,
 } from '../assets/croupie-functions.js';
 
 import transferControlToRobot from './robot.js';
@@ -24,6 +25,31 @@ export const USER_PUT_CARD = 'USER_PUT_CARD';
 export const END_OF_TURN = 'END_OF_TURN';
 export const TAKE_ALL_TABLE_CARDS = 'TAKE_ALL_TABLE_CARDS';
 
+function getCards(quantity, forWho, deck, trumpCard) {
+  return {
+    type: GET_CARDS,
+    payload: {
+      quantity,
+      [`${forWho}sCards`]: putCardsInRightOrder(deck.slice(-quantity), trumpCard),
+    },
+  };
+}
+
+function setActivePlayer(activePlayer, playersAction, availableCards) {
+  return {
+    type: SET_ACTIVE_PLAYER,
+    payload: {
+      activePlayer,
+      playersAction,
+      availableCards,
+    },
+  };
+}
+
+export function setEndOfTurn() {
+  return { type: END_OF_TURN };
+}
+
 export function getOutCards() {
   return (dispatch, getState) => {
     dispatch({
@@ -38,133 +64,64 @@ export function getOutCards() {
       payload: trumpCard,
     });
 
-    dispatch({
-      type: GET_CARDS,
-      payload: {
-        quantity: 6,
-        usersCards: putCardsInRightOrder(getState().croupie.deck.slice(-6), trumpCard),
-      },
-    });
+    dispatch(getCards(6, user, getState().croupie.deck, trumpCard));
+    dispatch(getCards(6, robot, getState().croupie.deck, trumpCard));
 
-    dispatch({
-      type: GET_CARDS,
-      payload: {
-        quantity: 6,
-        robotsCards: putCardsInRightOrder(getState().croupie.deck.slice(-6), trumpCard),
-      },
-    });
+    const croupieState = getState().croupie;
+    const firstActivePlayer = setFirstActivePlayer(croupieState);
+    const availableCards = getAvailableCards(croupieState, firstActivePlayer);
 
-    const currentCroupieState = getState().croupie;
-    const activePlayer = setFirstActivePlayer(currentCroupieState);
-    const playersAction = attack;
+    dispatch(setActivePlayer(firstActivePlayer, attack, availableCards));
 
-    dispatch({
-      type: SET_ACTIVE_PLAYER,
-      payload: {
-        activePlayer,
-        playersAction,
-        availableCards: getAvailableCards(
-          currentCroupieState[`${activePlayer}sCards`].cards,
-          playersAction,
-          currentCroupieState.attackCards,
-          currentCroupieState.tableCards,
-          currentCroupieState.trumpCard.suit,
-        ),
-      },
-    });
-
-    if (activePlayer === robot) {
-      transferControlToRobot(dispatch, getState);
+    if (firstActivePlayer === robot) {
+      dispatch(transferControlToRobot());
     }
 
     setTimeout(() => dispatch({ type: START }), 400);
   };
 }
 
-export function putCard(card) {
+export function userPutCard(card) {
   return (dispatch, getState) => {
-    let currentCroupieState = getState().croupie;
-    if (currentCroupieState.activePlayer === user) {
+    let croupieState = getState().croupie;
+    if (croupieState.activePlayer === user) {
       dispatch({
         type: USER_PUT_CARD,
         payload: {
           card,
-          playersAction: currentCroupieState.playersAction,
+          playersAction: croupieState.playersAction,
         },
       });
 
-      currentCroupieState = getState().croupie;
-      const { playersAction, robotsCards, attackCards, tableCards, trumpCard } = currentCroupieState;
-      const newPlayersAction = playersAction === attack ? defend : attack;
+      croupieState = getState().croupie;
+      const playersAction = togglePlayersActions(croupieState.playersAction);
+      const availableCards = getAvailableCards(croupieState, robot);
 
-      dispatch({
-        type: SET_ACTIVE_PLAYER,
-        payload: {
-          activePlayer: robot,
-          playersAction: newPlayersAction,
-          availableCards: getAvailableCards(
-            robotsCards.cards,
-            newPlayersAction,
-            attackCards,
-            tableCards,
-            trumpCard.suit,
-          ),
-        },
-      });
-      transferControlToRobot(dispatch, getState);
+      dispatch(setActivePlayer(robot, playersAction, availableCards));
+      dispatch(transferControlToRobot());
     }
-  };
-}
-
-export function setEndOfTurn() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: END_OF_TURN,
-    });
   };
 }
 
 export function takeAllTableCards() {
   return (dispatch, getState) => {
-    const { activePlayer, tableCards } = getState().croupie.state;
-    if (activePlayer === robot) {
-      transferControlToRobot(dispatch, getState);
-    } else {
-      dispatch({
-        type: TAKE_ALL_TABLE_CARDS,
-        payload: {
-          activePlayer: robot,
-          cards: tableCards,
-        },
-      });
-      dispatch({
-        type: END_OF_TURN,
-        payload: {
-          activePlayer: robot,
-          cards: tableCards,
-        },
-      });
-    }
+    const { activePlayer, tableCards } = getState().croupie;
+    dispatch({
+      type: TAKE_ALL_TABLE_CARDS,
+      payload: {
+        activePlayer,
+        cards: tableCards,
+      },
+    });
+    dispatch(setEndOfTurn());
   };
 }
 
-export function transferControlFromRobot(dispatch, getState) {
-  const currentCroupieState = getState().croupie;
-  const { playersAction, usersCards, attackCards, tableCards, trumpCard } = currentCroupieState;
-  const newPlayersAction = playersAction === attack ? defend : attack;
-
-  dispatch({
-    type: SET_ACTIVE_PLAYER,
-    payload: {
-      activePlayer: user,
-      playersAction: newPlayersAction,
-      availableCards: getAvailableCards(
-        usersCards.cards,
-        newPlayersAction,
-        attackCards,
-        tableCards,
-        trumpCard.suit,
-      ),
-    },
-  });
+export function transferControlFromRobot() {
+  return (dispatch, getState) => {
+    const croupieState = getState().croupie;
+    const playersAction = togglePlayersActions(croupieState.playersAction);
+    const availableCards = getAvailableCards(croupieState, user);
+    dispatch(setActivePlayer(user, playersAction, availableCards));
+  };
 }

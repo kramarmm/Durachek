@@ -4,36 +4,36 @@
 
 import {
   ROBOT_PUT_CARD,
-  END_OF_TURN,
-  TAKE_ALL_TABLE_CARDS,
   transferControlFromRobot,
+  setEndOfTurn,
+  takeAllTableCards,
   robot,
   attack,
 } from './croupie.js';
 
-export default function transferControlToRobot(dispatch, getState) {
-  const state = getState().croupie;
-  if (state.robotsCards.availableCards.length) {
-    dispatch({
-      type: ROBOT_PUT_CARD,
-      payload: {
-        card: state.robotsCards.availableCards[state.robotsCards.availableCards.length - 1],
-        playersAction: state.playersAction,
-      },
-    });
-  } else {
-    if (state.playersAction === attack) {
-      dispatch({ type: END_OF_TURN });
-    } else {
+export default function transferControlToRobot() {
+  return (dispatch, getState) => {
+    const state = getState().croupie;
+    const cards = state.robotsCards.availableCards;
+
+    if (cards.length) {
       dispatch({
-        type: TAKE_ALL_TABLE_CARDS,
+        type: ROBOT_PUT_CARD,
         payload: {
-          activePlayer: robot,
-          cards: state.tableCards,
+          card: cards[cards.length - 1],
+          playersAction: state.playersAction,
         },
       });
     }
-  }
 
-  transferControlFromRobot(dispatch, getState);
+    if (!cards.length) {
+      if (state.playersAction === attack) {
+        dispatch(setEndOfTurn());
+      } else {
+        dispatch(takeAllTableCards());
+      }
+    }
+
+    dispatch(transferControlFromRobot());
+  };
 }
