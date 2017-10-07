@@ -4,6 +4,7 @@ import {
   setFirstActivePlayer,
   getAvailableCards,
   togglePlayersActions,
+  toggleActivePlayers,
 } from '../assets/croupie-functions.js';
 
 import transferControlToRobot from './robot.js';
@@ -69,7 +70,7 @@ export function getOutCards() {
 
     const croupieState = getState().croupie;
     const firstActivePlayer = setFirstActivePlayer(croupieState);
-    const availableCards = getAvailableCards(croupieState, firstActivePlayer);
+    const availableCards = croupieState[`${firstActivePlayer}sCards`].cards;
 
     dispatch(setActivePlayer(firstActivePlayer, attack, availableCards));
 
@@ -105,7 +106,9 @@ export function userPutCard(card) {
 
 export function takeAllTableCards() {
   return (dispatch, getState) => {
-    const { activePlayer, tableCards } = getState().croupie;
+    const croupieState = getState().croupie;
+    const { activePlayer, tableCards, deck, trumpCard } = croupieState;
+
     dispatch({
       type: TAKE_ALL_TABLE_CARDS,
       payload: {
@@ -113,7 +116,18 @@ export function takeAllTableCards() {
         cards: tableCards,
       },
     });
+
     dispatch(setEndOfTurn());
+    // переименовать на finishTurn
+    // а если отбой то наверное getOutCards и раздаем обоим
+    // разобраться с кнопкой пользователя
+
+    const nextActivePlayer = toggleActivePlayers(activePlayer);
+    const needQuantityCards = 6 - croupieState[`${nextActivePlayer}sCards`].cards.length;
+    dispatch(getCards(needQuantityCards, nextActivePlayer, deck, trumpCard));
+
+    const availableCards = croupieState[`${nextActivePlayer}sCards`].cards;
+    dispatch(setActivePlayer(nextActivePlayer, attack, availableCards));
   };
 }
 

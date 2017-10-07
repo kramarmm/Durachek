@@ -1,15 +1,19 @@
-import { defend, attack } from '../assets/consts.js';
+import { defend, attack, robot, user } from '../assets/consts.js';
 
 const suits = ['d', 's', 'h', 'c'];
 
 export function togglePlayersActions(current) {
   return current === attack ? defend : attack;
 }
+export function toggleActivePlayers(current) {
+  return current === robot ? user : robot;
+}
 
 export function putCardsInRightOrder(cards, trump) {
-  const index = suits.findIndex(s => s === trump[0].suit);
+  const trumpSuit = trump[0] ? trump[0].suit : trump.suit;
+  const index = suits.findIndex(s => s === trumpSuit);
   suits.splice(index, 1);
-  suits.unshift(trump[0].suit);
+  suits.unshift(trumpSuit);
   return suits.reduce((acc, suit) => {
     return acc.concat(cards.filter(card => card.suit === suit).sort((a, b) => b.value - a.value));
   }, []);

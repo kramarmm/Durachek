@@ -34,11 +34,14 @@ class LooTable extends Component {
       takeAllTableCards,
     } = this.props;
 
-    const userMayGetCards = activePlayer === robot && playersAction === attack ||
-      activePlayer === user && playersAction === defend;
+    const userMayGetCards = (activePlayer === robot && playersAction === attack) ||
+      (activePlayer === user && playersAction === defend);
 
-    const userMayFinishTurn = activePlayer === user && playersAction === attack ||
-      activePlayer === robot && playersAction === defend;
+    const userMayFinishTurn = (activePlayer === user && playersAction === attack) ||
+      (activePlayer === robot && playersAction === defend);
+
+    console.log('userMayGetCards', userMayGetCards);
+    console.log('userMayFinishTurn', userMayFinishTurn);
 
     return (
       <div>
@@ -88,16 +91,16 @@ class LooTable extends Component {
             {
               (userMayGetCards) ? (
                 <Button
-                  name="Отбой"
+                  name="Взять"
                   className={activePlayer === user && playersAction === attack ? 'button' : 'button disable-btn'}
-                  onClick={setEndOfTurn}
+                  onClick={takeAllTableCards}
                   activePlayer={activePlayer}
                 />
               ) : (userMayFinishTurn) ? (
                 <Button
-                  name="Взять"
+                  name="Отбой"
                   className={activePlayer === user && playersAction === defend ? 'button' : 'button disable-btn'}
-                  onClick={takeAllTableCards}
+                  onClick={setEndOfTurn}
                   activePlayer={activePlayer}
                 />
               ) : null
