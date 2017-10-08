@@ -15,6 +15,60 @@ import {
 } from '../assets/consts.js';
 
 class LooTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userMayGetCards: false,
+      userMayFinishTurn: false,
+    };
+    this.checkUserMayGetCards = this.checkUserMayGetCards.bind(this);
+    this.checkUserMayFinishTurn = this.checkUserMayFinishTurn.bind(this);
+  }
+
+  componentWillMount() {
+    this.checkUserMayGetCards(this.props.croupie);
+    this.checkUserMayFinishTurn(this.props.croupie);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.checkUserMayGetCards(nextProps.croupie);
+    this.checkUserMayFinishTurn(nextProps.croupie);
+  }
+
+  checkUserMayGetCards(props) {
+    if (props.tableCards.length) {
+      const { activePlayer, playersAction } = props;
+
+      const nextUserMayGetCards = (activePlayer === robot && playersAction === attack) ||
+        (activePlayer === user && playersAction === defend);
+
+      if (this.state.userMayGetCards !== nextUserMayGetCards) {
+        this.setState({ userMayGetCards: nextUserMayGetCards });
+      }
+    } else {
+      if (this.state.userMayGetCards) {
+        this.setState({ userMayGetCards: false });
+      }
+    }
+  }
+
+  checkUserMayFinishTurn(props) {
+    if (props.tableCards.length) {
+      const { activePlayer, playersAction } = props;
+
+      const nextUserMayFinishTurn = (activePlayer === user && playersAction === attack) ||
+        (activePlayer === robot && playersAction === defend);
+
+      if (this.state.userMayFinishTurn !== nextUserMayFinishTurn) {
+        this.setState({ userMayFinishTurn: nextUserMayFinishTurn });
+      }
+    } else {
+      if (this.state.userMayFinishTurn) {
+        this.setState({ userMayFinishTurn: false });
+      }
+    }
+  }
+
   render() {
     const {
       deck,
@@ -24,24 +78,14 @@ class LooTable extends Component {
       tableCards,
       activePlayer,
       attackCards,
-      playersAction,
       messages,
     } = this.props.croupie;
 
     const {
       userPutCard,
-      setEndOfTurn,
+      moveToBreak,
       takeAllTableCards,
     } = this.props;
-
-    const userMayGetCards = (activePlayer === robot && playersAction === attack) ||
-      (activePlayer === user && playersAction === defend);
-
-    const userMayFinishTurn = (activePlayer === user && playersAction === attack) ||
-      (activePlayer === robot && playersAction === defend);
-
-    console.log('userMayGetCards', userMayGetCards);
-    console.log('userMayFinishTurn', userMayFinishTurn);
 
     return (
       <div>
@@ -89,18 +133,18 @@ class LooTable extends Component {
 
           <div className="button-block">
             {
-              (userMayGetCards) ? (
+              (this.state.userMayGetCards) ? (
                 <Button
                   name="Взять"
-                  className={activePlayer === user && playersAction === attack ? 'button' : 'button disable-btn'}
+                  className="button"
                   onClick={takeAllTableCards}
                   activePlayer={activePlayer}
                 />
-              ) : (userMayFinishTurn) ? (
+              ) : (this.state.userMayFinishTurn) ? (
                 <Button
                   name="Отбой"
-                  className={activePlayer === user && playersAction === defend ? 'button' : 'button disable-btn'}
-                  onClick={setEndOfTurn}
+                  className="button"
+                  onClick={moveToBreak}
                   activePlayer={activePlayer}
                 />
               ) : null

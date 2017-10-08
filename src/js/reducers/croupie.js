@@ -7,7 +7,7 @@ import {
   USER_PUT_CARD,
   ROBOT_PUT_CARD,
   START,
-  END_OF_TURN,
+  MOVE_TO_BREAK,
   TAKE_ALL_TABLE_CARDS,
 } from '../actions/croupie.js';
 
@@ -42,12 +42,14 @@ function trumpCard(state = '', action) {
   }
 }
 
-function usersCards(state = {}, action) {
+function usersCards(state = { cards: [], availableCards: [] }, action) {
   switch (action.type) {
     case GET_CARDS:
       return {
         ...state,
-        cards: action.payload.usersCards || state.cards,
+        cards: action.payload.usersCards
+          ? [...state.cards, ...action.payload.usersCards]
+          : state.cards,
       };
     case SET_ACTIVE_PLAYER:
       if (action.payload.activePlayer === 'user') {
@@ -70,10 +72,7 @@ function usersCards(state = {}, action) {
       if (action.payload.activePlayer === 'user') {
         return {
           ...state,
-          cards: [
-            ...state.cards,
-            ...action.payload.cards,
-          ],
+          cards: action.payload.cards,
         };
       }
       return state;
@@ -82,12 +81,14 @@ function usersCards(state = {}, action) {
   }
 }
 
-function robotsCards(state = {}, action) {
+function robotsCards(state = { cards: [], availableCards: [] }, action) {
   switch (action.type) {
     case GET_CARDS:
       return {
         ...state,
-        cards: action.payload.robotsCards || state.cards,
+        cards: action.payload.robotsCards
+          ? [...state.cards, ...action.payload.robotsCards]
+          : state.cards,
       };
     case SET_ACTIVE_PLAYER:
       if (action.payload.activePlayer === 'robot') {
@@ -110,10 +111,7 @@ function robotsCards(state = {}, action) {
       if (action.payload.activePlayer === 'robot') {
         return {
           ...state,
-          cards: [
-            ...state.cards,
-            ...action.payload.cards,
-          ],
+          cards: action.payload.cards,
         };
       }
       return state;
@@ -152,7 +150,7 @@ function attackCards(state = [], action) {
         return [...state, action.payload.card];
       }
       return [];
-    case END_OF_TURN:
+    case MOVE_TO_BREAK:
     case TAKE_ALL_TABLE_CARDS:
       return [];
     default:
@@ -166,7 +164,7 @@ function tableCards(state = [], action) {
       return [...state, action.payload.card];
     case ROBOT_PUT_CARD:
       return [...state, action.payload.card];
-    case END_OF_TURN:
+    case MOVE_TO_BREAK:
     case TAKE_ALL_TABLE_CARDS:
       return [];
     default:
@@ -185,7 +183,7 @@ function messages(state = [], action) {
       return [...state, 'robot put card, bitch!'];
     case USER_PUT_CARD:
       return [...state, 'you put card, bitch!'];
-    case END_OF_TURN:
+    case MOVE_TO_BREAK:
       return [...state, 'end of turn, bitch!'];
     case TAKE_ALL_TABLE_CARDS:
       if (action.payload.activePlayer === 'robot') {

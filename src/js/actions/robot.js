@@ -5,11 +5,11 @@
 import {
   ROBOT_PUT_CARD,
   transferControlFromRobot,
-  setEndOfTurn,
+  moveToBreak,
   takeAllTableCards,
-  robot,
-  attack,
 } from './croupie.js';
+
+import { attack } from '../assets/consts.js';
 
 export default function transferControlToRobot() {
   return (dispatch, getState) => {
@@ -24,16 +24,16 @@ export default function transferControlToRobot() {
           playersAction: state.playersAction,
         },
       });
+
+      dispatch(transferControlFromRobot());
     }
 
     if (!cards.length) {
       if (state.playersAction === attack) {
-        dispatch(setEndOfTurn());
+        dispatch(moveToBreak());
       } else {
         dispatch(takeAllTableCards());
       }
     }
-
-    dispatch(transferControlFromRobot());
   };
 }

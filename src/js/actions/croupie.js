@@ -23,7 +23,7 @@ export const GET_CARDS = 'GET_CARDS';
 export const SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER';
 export const ROBOT_PUT_CARD = 'ROBOT_PUT_CARD';
 export const USER_PUT_CARD = 'USER_PUT_CARD';
-export const END_OF_TURN = 'END_OF_TURN';
+export const MOVE_TO_BREAK = 'MOVE_TO_BREAK';
 export const TAKE_ALL_TABLE_CARDS = 'TAKE_ALL_TABLE_CARDS';
 
 function getCards(quantity, forWho, deck, trumpCard) {
@@ -45,10 +45,6 @@ function setActivePlayer(activePlayer, playersAction, availableCards) {
       availableCards,
     },
   };
-}
-
-export function setEndOfTurn() {
-  return { type: END_OF_TURN };
 }
 
 export function getOutCards() {
@@ -109,25 +105,59 @@ export function takeAllTableCards() {
     const croupieState = getState().croupie;
     const { activePlayer, tableCards, deck, trumpCard } = croupieState;
 
+    const mergedCards = tableCards.concat(croupieState[`${activePlayer}sCards`].cards);
+
     dispatch({
       type: TAKE_ALL_TABLE_CARDS,
       payload: {
         activePlayer,
-        cards: tableCards,
+        cards: putCardsInRightOrder(mergedCards, trumpCard),
       },
     });
 
-    dispatch(setEndOfTurn());
-    // переименовать на finishTurn
-    // а если отбой то наверное getOutCards и раздаем обоим
-    // разобраться с кнопкой пользователя
-
     const nextActivePlayer = toggleActivePlayers(activePlayer);
+
     const needQuantityCards = 6 - croupieState[`${nextActivePlayer}sCards`].cards.length;
-    dispatch(getCards(needQuantityCards, nextActivePlayer, deck, trumpCard));
+    if (needQuantityCards > 0) {
+      dispatch(getCards(needQuantityCards, nextActivePlayer, deck, trumpCard));
+    }
 
     const availableCards = croupieState[`${nextActivePlayer}sCards`].cards;
     dispatch(setActivePlayer(nextActivePlayer, attack, availableCards));
+
+    if (nextActivePlayer === robot) {
+      dispatch(transferControlToRobot());
+    }
+  };
+}
+
+export function moveToBreak() {
+  return (dispatch, getState) => {
+    const croupieState = getState().croupie;
+    const { activePlayer, deck, trumpCard } = croupieState;
+    let nextDeck = deck;
+
+    dispatch({ type: MOVE_TO_BREAK });
+
+    const nextActivePlayer = toggleActivePlayers(activePlayer);
+
+    const needQuantityCards = 6 - croupieState[`${activePlayer}sCards`].cards.length;
+    if (needQuantityCards > 0) {
+      dispatch(getCards(needQuantityCards, activePlayer, nextDeck, trumpCard));
+      nextDeck = getState().croupie.deck;
+    }
+
+    const needQuantityCardsForNext = 6 - croupieState[`${nextActivePlayer}sCards`].cards.length;
+    if (needQuantityCardsForNext > 0) {
+      dispatch(getCards(needQuantityCards, nextActivePlayer, nextDeck, trumpCard));
+    }
+
+    const availableCards = croupieState[`${nextActivePlayer}sCards`].cards;
+    dispatch(setActivePlayer(nextActivePlayer, attack, availableCards));
+
+    if (nextActivePlayer === robot) {
+      dispatch(transferControlToRobot());
+    }
   };
 }
 
