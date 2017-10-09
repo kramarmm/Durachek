@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 
 import * as croupieActions from '../actions/croupie.js';
 
+import { start, game, end } from '../assets/consts.js';
+
 import ErrorHandler from '../components/error-handler.js';
 import Start from '../components/start.js';
-import Process from '../components/process.js';
+import Game from '../components/game.js';
 import End from '../components/end.js';
 
 const Durachek = props => (
@@ -13,14 +15,14 @@ const Durachek = props => (
     <div className="main">
       <div className="wrapper">
         {
-          props.croupie.gameState === 'start' ? (
+          props.croupie.gameState === start ? (
             <Start
               getOutCards={props.getOutCards}
             />
-          ) : props.croupie.gameState === 'end' ? (
+          ) : props.croupie.gameState === end ? (
             <End />
-          ) : props.croupie.gameState === 'process' ? (
-            <Process />
+          ) : props.croupie.gameState === game ? (
+            <Game />
           ) : null
         }
       </div>

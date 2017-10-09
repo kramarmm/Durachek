@@ -25,6 +25,8 @@ export const ROBOT_PUT_CARD = 'ROBOT_PUT_CARD';
 export const USER_PUT_CARD = 'USER_PUT_CARD';
 export const MOVE_TO_BREAK = 'MOVE_TO_BREAK';
 export const TAKE_ALL_TABLE_CARDS = 'TAKE_ALL_TABLE_CARDS';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 
 function getCards(quantity, forWho, deck, trumpCard) {
   return {
@@ -118,11 +120,11 @@ export function takeAllTableCards() {
     const nextActivePlayer = toggleActivePlayers(activePlayer);
 
     const needQuantityCards = 6 - croupieState[`${nextActivePlayer}sCards`].cards.length;
-    if (needQuantityCards > 0) {
+    if (needQuantityCards > 0 && croupieState.deck.length) {
       dispatch(getCards(needQuantityCards, nextActivePlayer, deck, trumpCard));
     }
 
-    const availableCards = croupieState[`${nextActivePlayer}sCards`].cards;
+    const availableCards = getState().croupie[`${nextActivePlayer}sCards`].cards;
     dispatch(setActivePlayer(nextActivePlayer, attack, availableCards));
 
     if (nextActivePlayer === robot) {
@@ -142,17 +144,17 @@ export function moveToBreak() {
     const nextActivePlayer = toggleActivePlayers(activePlayer);
 
     const needQuantityCards = 6 - croupieState[`${activePlayer}sCards`].cards.length;
-    if (needQuantityCards > 0) {
+    if (needQuantityCards > 0 && nextDeck.length) {
       dispatch(getCards(needQuantityCards, activePlayer, nextDeck, trumpCard));
       nextDeck = getState().croupie.deck;
     }
 
     const needQuantityCardsForNext = 6 - croupieState[`${nextActivePlayer}sCards`].cards.length;
-    if (needQuantityCardsForNext > 0) {
+    if (needQuantityCardsForNext > 0 && nextDeck.length) {
       dispatch(getCards(needQuantityCards, nextActivePlayer, nextDeck, trumpCard));
     }
 
-    const availableCards = croupieState[`${nextActivePlayer}sCards`].cards;
+    const availableCards = getState().croupie[`${nextActivePlayer}sCards`].cards;
     dispatch(setActivePlayer(nextActivePlayer, attack, availableCards));
 
     if (nextActivePlayer === robot) {

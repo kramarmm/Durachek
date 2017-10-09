@@ -11,10 +11,19 @@ import {
   TAKE_ALL_TABLE_CARDS,
 } from '../actions/croupie.js';
 
-function gameState(state = 'start', action) {
+import {
+  start,
+  game,
+  robot,
+  user,
+  defend,
+  attack,
+} from '../assets/consts.js';
+
+function gameState(state = start, action) {
   switch (action.type) {
     case START:
-      return 'process';
+      return game;
     default:
       return state;
   }
@@ -25,9 +34,12 @@ function deck(state = [], action) {
     case SUFFLE_DECK:
       return action.payload;
     case GET_CARDS:
-      return state.slice(0, state.length - action.payload.quantity);
+      const availableQuantityToGet = action.payload.quantity > state.length
+        ? state.length
+        : action.payload.quantity;
+      return state.slice(0, state.length - availableQuantityToGet);
     case GET_TRUMP_CARD:
-      return state.slice(0, state.length - 1);
+      return [state[state.length - 1], ...state.slice(0, state.length - 1)];
     default:
       return state;
   }
@@ -52,7 +64,7 @@ function usersCards(state = { cards: [], availableCards: [] }, action) {
           : state.cards,
       };
     case SET_ACTIVE_PLAYER:
-      if (action.payload.activePlayer === 'user') {
+      if (action.payload.activePlayer === user) {
         return {
           ...state,
           availableCards: action.payload.availableCards,
@@ -69,7 +81,7 @@ function usersCards(state = { cards: [], availableCards: [] }, action) {
         ],
       };
     case TAKE_ALL_TABLE_CARDS:
-      if (action.payload.activePlayer === 'user') {
+      if (action.payload.activePlayer === user) {
         return {
           ...state,
           cards: action.payload.cards,
@@ -91,7 +103,7 @@ function robotsCards(state = { cards: [], availableCards: [] }, action) {
           : state.cards,
       };
     case SET_ACTIVE_PLAYER:
-      if (action.payload.activePlayer === 'robot') {
+      if (action.payload.activePlayer === robot) {
         return {
           ...state,
           availableCards: action.payload.availableCards,
@@ -108,7 +120,7 @@ function robotsCards(state = { cards: [], availableCards: [] }, action) {
         ],
       };
     case TAKE_ALL_TABLE_CARDS:
-      if (action.payload.activePlayer === 'robot') {
+      if (action.payload.activePlayer === robot) {
         return {
           ...state,
           cards: action.payload.cards,
@@ -141,12 +153,12 @@ function playersAction(state = '', action) {
 function attackCards(state = [], action) {
   switch (action.type) {
     case USER_PUT_CARD:
-      if (action.payload.playersAction === 'attack') {
+      if (action.payload.playersAction === attack) {
         return [...state, action.payload.card];
       }
       return [];
     case ROBOT_PUT_CARD:
-      if (action.payload.playersAction === 'attack') {
+      if (action.payload.playersAction === attack) {
         return [...state, action.payload.card];
       }
       return [];
@@ -172,30 +184,6 @@ function tableCards(state = [], action) {
   }
 }
 
-function messages(state = [], action) {
-  switch (action.type) {
-    case SET_ACTIVE_PLAYER:
-      if (action.payload.activePlayer === 'user') {
-        return [...state, 'your move, bitch!'];
-      }
-      return state;
-    case ROBOT_PUT_CARD:
-      return [...state, 'robot put card, bitch!'];
-    case USER_PUT_CARD:
-      return [...state, 'you put card, bitch!'];
-    case MOVE_TO_BREAK:
-      return [...state, 'end of turn, bitch!'];
-    case TAKE_ALL_TABLE_CARDS:
-      if (action.payload.activePlayer === 'robot') {
-        return [...state, 'robots all cards, bitch!'];
-      } else {
-        return [...state, 'your all cards, bitch!'];
-      }
-    default:
-      return state;
-  }
-}
-
 export default combineReducers({
   gameState,
   deck,
@@ -206,5 +194,4 @@ export default combineReducers({
   playersAction,
   attackCards,
   tableCards,
-  messages,
 });

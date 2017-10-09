@@ -5,6 +5,7 @@ const suits = ['d', 's', 'h', 'c'];
 export function togglePlayersActions(current) {
   return current === attack ? defend : attack;
 }
+
 export function toggleActivePlayers(current) {
   return current === robot ? user : robot;
 }
@@ -24,12 +25,12 @@ export function setFirstActivePlayer(croupieState) {
   const robotsC = croupieState.robotsCards.cards;
   const trump = croupieState.trumpCard.suit;
   let maxUserCard = 0;
-  let firstActivePlayer = 'user';
+  let firstActivePlayer = user;
   usersC.forEach((card) => {
     if (card.suit === trump && card.value > maxUserCard) maxUserCard = card.value;
   });
   robotsC.forEach((card) => {
-    if (card.suit === trump && card.value > maxUserCard) firstActivePlayer = 'robot';
+    if (card.suit === trump && card.value > maxUserCard) firstActivePlayer = robot;
   });
   return firstActivePlayer;
 }
@@ -43,7 +44,7 @@ export function getAvailableCards(croupieState, currentActivePlayer) {
 
   const selectedCards = [];
 
-  if (attackCards.length && playersAction === 'defend') {
+  if (attackCards.length && playersAction === defend) {
     // здесь возможно для attackCards цикл не нужен, а брать только [0]
     for (let i = 0; i < attackCards.length; i++) {
       for (let j = 0; j < cards.length; j++) {
@@ -61,7 +62,7 @@ export function getAvailableCards(croupieState, currentActivePlayer) {
     return selectedCards;
   }
 
-  if (tableCards.length && playersAction === 'attack') {
+  if (tableCards.length && playersAction === attack) {
     for (let i = 0; i < tableCards.length; i++) {
       for (let j = 0; j < cards.length; j++) {
         if (cards[j].value === tableCards[i].value) selectedCards.push(cards[j]);
@@ -70,7 +71,7 @@ export function getAvailableCards(croupieState, currentActivePlayer) {
     return selectedCards;
   }
 
-  if (!attackCards.length && playersAction === 'attack') {
+  if (!attackCards.length && playersAction === attack) {
     return cards;
   }
 

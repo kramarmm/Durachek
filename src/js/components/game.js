@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import Card from './card.js';
 import Button from './button.js';
-import Messages from './messages.js';
 
 import * as croupieActions from '../actions/croupie.js';
 
@@ -14,7 +13,7 @@ import {
   attack,
 } from '../assets/consts.js';
 
-class LooTable extends Component {
+class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,7 +77,6 @@ class LooTable extends Component {
       tableCards,
       activePlayer,
       attackCards,
-      messages,
     } = this.props.croupie;
 
     const {
@@ -101,18 +99,28 @@ class LooTable extends Component {
             }
           </div>
 
-          <Messages messages={messages} />
+          {
+            activePlayer === user ? (
+              <div className="message-block">
+                Your move, bitch!
+              </div>
+            ) : null
+          }
 
           <div className="deck">
-            <div className="trump-card">
-              <Card card={trumpCard} />
-            </div>
             {
               deck.length ? (
+                <div className="trump-card">
+                  <Card card={trumpCard} />
+                </div>
+              ) : `trump card is ${trumpCard.value} ${trumpCard.suit} `
+            }
+            {
+              deck.length > 1 ? (
                 <div className="deck-back">
                   <Card back />
                 </div>
-              ) : null
+              ) : 'deck is over'
             }
 
             <div className="table-cards">
@@ -182,4 +190,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   croupieActions,
-)(LooTable);
+)(Game);
