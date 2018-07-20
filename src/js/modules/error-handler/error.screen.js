@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class ErrorHandler extends Component {
+export default class ErrorScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -19,5 +19,3 @@ class ErrorHandler extends Component {
     return this.props.children;
   }
 }
-
-export default ErrorHandler;

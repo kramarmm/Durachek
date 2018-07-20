@@ -27,7 +27,7 @@ module.exports = {
         test: /\.less$/,
         exclude: /(node_modules)/,
         include: [
-          path.join(__dirname, '/src/css'),
+          path.join(__dirname, '/src/styles'),
         ],
         use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader'],
       },

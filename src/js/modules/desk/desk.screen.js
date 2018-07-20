@@ -4,42 +4,44 @@ import { connect } from 'react-redux';
 import Card from './card.js';
 import Button from './button.js';
 
-import * as croupieActions from '../actions/croupie.js';
+import * as deskActions from './desk.actions';
 
-import {
-  robot,
-  user,
-  defend,
-  attack,
-} from '../assets/consts.js';
+import { user } from '../user/user.consts';
+import { robot } from '../robot/robot.consts';
+import { defend, attack } from './desk.consts';
 
-class Game extends Component {
+class DeskScreen extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       userMayGetCards: false,
       userMayFinishTurn: false,
     };
-    this.checkUserMayGetCards = this.checkUserMayGetCards.bind(this);
-    this.checkUserMayFinishTurn = this.checkUserMayFinishTurn.bind(this);
   }
 
   componentWillMount() {
-    this.checkUserMayGetCards(this.props.croupie);
-    this.checkUserMayFinishTurn(this.props.croupie);
+    this.checkUserMayGetCards(this.props);
+    this.checkUserMayFinishTurn(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.checkUserMayGetCards(nextProps.croupie);
-    this.checkUserMayFinishTurn(nextProps.croupie);
+    this.checkUserMayGetCards(nextProps);
+    this.checkUserMayFinishTurn(nextProps);
   }
 
   checkUserMayGetCards(props) {
-    if (props.tableCards.length) {
-      const { activePlayer, playersAction } = props;
+    if (props.desk.cards.length) {
+      const {
+        activePlayer,
+        playersAction,
+      } = props.desk;
 
-      const nextUserMayGetCards = (activePlayer === robot && playersAction === attack) ||
-        (activePlayer === user && playersAction === defend);
+      const nextUserMayGetCards = (
+        activePlayer === robot && playersAction === attack
+      ) || (
+        activePlayer === user && playersAction === defend
+      );
 
       if (this.state.userMayGetCards !== nextUserMayGetCards) {
         this.setState({ userMayGetCards: nextUserMayGetCards });
@@ -52,11 +54,14 @@ class Game extends Component {
   }
 
   checkUserMayFinishTurn(props) {
-    if (props.tableCards.length) {
-      const { activePlayer, playersAction } = props;
+    if (props.desk.cards.length) {
+      const { activePlayer, playersAction } = props.desk;
 
-      const nextUserMayFinishTurn = (activePlayer === user && playersAction === attack) ||
-        (activePlayer === robot && playersAction === defend);
+      const nextUserMayFinishTurn = (
+        activePlayer === user && playersAction === attack
+      ) || (
+        activePlayer === robot && playersAction === defend
+      );
 
       if (this.state.userMayFinishTurn !== nextUserMayFinishTurn) {
         this.setState({ userMayFinishTurn: nextUserMayFinishTurn });
@@ -70,19 +75,10 @@ class Game extends Component {
 
   render() {
     const {
+      robot,
+      user,
+      desk,
       deck,
-      trumpCard,
-      robotsCards,
-      usersCards,
-      tableCards,
-      activePlayer,
-      attackCards,
-    } = this.props.croupie;
-
-    const {
-      userPutCard,
-      moveToBreak,
-      takeAllTableCards,
     } = this.props;
 
     return (
@@ -90,7 +86,7 @@ class Game extends Component {
         <div className="loo-table">
           <div className="robots-card-block">
             {
-              robotsCards.cards.map(card => (
+              robot.cards.map(card => (
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
@@ -100,7 +96,7 @@ class Game extends Component {
           </div>
 
           {
-            activePlayer === user ? (
+            desk.activePlayer === user ? (
               <div className="message-block">
                 Your move, bitch!
               </div>
@@ -111,9 +107,9 @@ class Game extends Component {
             {
               deck.length ? (
                 <div className="trump-card">
-                  <Card card={trumpCard} />
+                  <Card card={desk.trumpCard} />
                 </div>
-              ) : `trump card is ${trumpCard.value} ${trumpCard.suit} `
+              ) : null
             }
             {
               deck.length > 1 ? (
@@ -125,11 +121,15 @@ class Game extends Component {
 
             <div className="table-cards">
               {
-                tableCards ? (
-                  tableCards.map((card, i) => (
+                desk.cards ? (
+                  desk.cards.map((card, i) => (
                     <div
                       key={`${card.value}${card.suit}`}
-                      className={i % 2 === 1 && attackCards.length < 2 ? 'defend-cards' : 'attack-cards'}
+                      className={
+                        i % 2 === 1 && desk.attackCards.length < 2
+                          ? 'defend-cards'
+                          : 'attack-cards'
+                      }
                     >
                       <Card card={card} />
                     </div>
@@ -145,15 +145,15 @@ class Game extends Component {
                 <Button
                   name="Взять"
                   className="button"
-                  onClick={takeAllTableCards}
-                  activePlayer={activePlayer}
+                  onClick={this.props.takeAllDeskCards}
+                  activePlayer={desk.activePlayer}
                 />
               ) : (this.state.userMayFinishTurn) ? (
                 <Button
                   name="Отбой"
                   className="button"
-                  onClick={moveToBreak}
-                  activePlayer={activePlayer}
+                  onClick={this.props.moveToBreak}
+                  activePlayer={desk.activePlayer}
                 />
               ) : null
             }
@@ -161,14 +161,14 @@ class Game extends Component {
 
           <div className="users-card-block">
             {
-              usersCards.cards.map(card => (
+              user.cards.map(card => (
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
-                  onClick={userPutCard}
-                  available={usersCards.availableCards
-                    && usersCards.availableCards.indexOf(card) !== -1
-                    && activePlayer === 'user'}
+                  onClick={this.props.userPutCard}
+                  available={user.availableCards
+                    && user.availableCards.indexOf(card) !== -1
+                    && desk.activePlayer === 'user'}
                 />
               ))
             }
@@ -181,13 +181,10 @@ class Game extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    croupie: state.croupie,
-    robot: state.robot,
-  };
+  return { ...state }; // do it with selectors
 }
 
 export default connect(
   mapStateToProps,
-  croupieActions,
-)(Game);
+  deskActions,
+)(DeskScreen);

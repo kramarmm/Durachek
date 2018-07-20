@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import configureStore from './configureStore';
-import Durachek from './containers/Durachek.js';
 
-import '../css/index.less';
+import createStore from './config/create-store';
+import MainScreen from './modules/game-states/main.screen';
+
+import '../styles/index.less';
 
 ReactDOM.render(
-  <Provider store={configureStore()}>
-    <Durachek />
+  <Provider store={createStore()}>
+    <MainScreen />
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById('js-root'),
 );

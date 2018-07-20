@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class End extends Component {
+class EndScreen extends Component {
   render() {
     return (
       <div>
@@ -10,4 +10,4 @@ class End extends Component {
   }
 }
 
-export default End;
+export default EndScreen;

@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import eyesMoving from '../assets/eyes.js';
+import { connect } from 'react-redux';
 
-export default class Start extends Component {
+import { getOutCards } from '../desk/desk.actions';
+
+import eyes from './eyes';
+
+class StartScreen extends Component {
   constructor(props) {
     super(props);
     this.startGame = this.startGame.bind(this);
   }
 
   componentDidMount() {
-    eyesMoving();
+    eyes.startMoving();
   }
 
   startGame() {
@@ -50,3 +54,10 @@ export default class Start extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  {
+    getOutCards
+  },
+)(StartScreen);
