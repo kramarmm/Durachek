@@ -58,6 +58,8 @@ function setActivePlayer(
 
 export function getOutCards() {
   return (dispatch, getState) => {
+    dispatch({ type: START });
+
     dispatch({
       type: SUFFLE_DECK,
       payload: DeckUtils.getShuffledDeck(),
@@ -82,8 +84,6 @@ export function getOutCards() {
     if (firstActivePlayer === robot) {
       dispatch(transferControlToRobot());
     }
-
-    setTimeout(() => dispatch({ type: START }), 400);
   };
 }
 
@@ -104,7 +104,7 @@ export function userPutCard(card) {
 
       dispatch(setActivePlayer(
         robot,
-        Desk.getNextPlayersActions(state.desk.playersAction),
+        Desk.getNextPlayersAction(state.desk.playersAction),
         Desk.getAvailableCards(state, robot),
       ));
       dispatch(transferControlToRobot());
@@ -133,7 +133,7 @@ export function takeAllDeskCards() {
       },
     });
 
-    const nextActivePlayer = Desk.getNextActivePlayers(desk.activePlayer);
+    const nextActivePlayer = Desk.getNextActivePlayer(desk.activePlayer);
 
     const needCards = 6 - state[nextActivePlayer].cards.length;
     if (needCards > 0 && deck.length) {
@@ -147,7 +147,7 @@ export function takeAllDeskCards() {
       );
     }
 
-    const availableCards = getState().desk[nextActivePlayer].cards;
+    const availableCards = getState()[nextActivePlayer].cards;
     dispatch(
       setActivePlayer(
         nextActivePlayer,
@@ -188,8 +188,8 @@ export function moveToBreak() {
     }
 
     // Get cards for next activePlayer
-    const nextActivePlayer = Desk.getNextActivePlayers(desk.activePlayer);
-    const needCardsForNext = 6 - croupieState[nextActivePlayer].cards.length;
+    const nextActivePlayer = Desk.getNextActivePlayer(desk.activePlayer);
+    const needCardsForNext = 6 - state[nextActivePlayer].cards.length;
 
     if (needCardsForNext > 0 && deck.length) {
       dispatch(
@@ -222,7 +222,7 @@ export function transferControlFromRobot() {
   return (dispatch, getState) => {
     const state = getState();
 
-    const playersAction = Desk.getNextPlayersActions(
+    const playersAction = Desk.getNextPlayersAction(
       state.desk.playersAction
     );
     const availableCards = Desk.getAvailableCards(state, user);

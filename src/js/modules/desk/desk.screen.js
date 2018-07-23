@@ -82,7 +82,7 @@ class DeskScreen extends Component {
     } = this.props;
 
     return (
-      <div>
+      <div className="main-block">
         <div className="loo-table">
           <div className="robots-card-block">
             {
@@ -143,15 +143,15 @@ class DeskScreen extends Component {
             {
               (this.state.userMayGetCards) ? (
                 <Button
-                  name="Взять"
-                  className="button"
+                  name="взять"
+                  className="btn btn-game"
                   onClick={this.props.takeAllDeskCards}
                   activePlayer={desk.activePlayer}
                 />
               ) : (this.state.userMayFinishTurn) ? (
                 <Button
-                  name="Отбой"
-                  className="button"
+                  name="отбой"
+                  className="btn btn-game"
                   onClick={this.props.moveToBreak}
                   activePlayer={desk.activePlayer}
                 />

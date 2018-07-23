@@ -15,11 +15,10 @@ const cardValuesRef = {
 export default function Card(props) {
   if (props.back) {
     return (
-      <div className="card">
-        <img src="images/back.png" alt="back" height="100%" width="100%" />
-      </div>
+      <div className="card card-back" />
     );
   }
+
   return (
     <span
       onClick={props.available && props.onClick ? () => props.onClick(props.card) : null}

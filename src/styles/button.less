@@ -1,0 +1,94 @@
+
+
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+svg rect {
+  stroke-dasharray: 400, 0;
+  -webkit-transition: all 0.8s ease-in-out;
+  -moz-transition: all 0.8s ease-in-out;
+  -ms-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
+}
+
+svg rect, svg path, svg polyline {
+  fill: none;
+  stroke: @main-color;
+  stroke-width: 1;
+}
+
+.btn {
+  font-family: sans-serif;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn-start {
+  width: 130px;
+  height: 65px;
+  margin: 15px auto;
+  font-size: 1.15rem;
+  text-align: center;
+  position: relative;
+  display: block;
+  padding: 20px;
+  background: @background-color;
+  text-transform: uppercase;
+  line-height: 1.5em;
+  color: @main-color;
+}
+
+.btn-start:hover svg rect {
+  stroke-width: 3;
+  stroke-dasharray: 35, 245;
+  stroke-dashoffset: 38;
+  -webkit-transition: all 0.8s ease-in-out;
+  -moz-transition: all 0.8s ease-in-out;
+  -ms-transition: all 0.8s ease-in-out;
+  -o-transition: all 0.8s ease-in-out;
+}
+
+.btn-start:hover {
+  stroke: @main-color;
+}
+
+@keyframes press {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(.95);
+    }
+}
+
+.btn-start:active {
+  color: @main-color-dark;
+  animation-name: press;
+  animation-direction: alternate;
+  animation-duration: .3s;
+}
+
+.btn-game {
+  width: 80px;
+  height: 40px;
+  font-size: 1rem;
+  position: fixed;
+  bottom: 160px;
+  right: 20px;
+  display: block;
+  color: @main-color;
+  background: @background-color;
+  border: 1px solid @main-color;
+}
+
+.btn-game:hover {
+  background-color: @background-color-hover;
+  border: 1px solid @main-color-light;
+}

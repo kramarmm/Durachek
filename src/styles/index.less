@@ -1,13 +1,19 @@
-@import 'animations.less';
+@import 'variables.less';
 @import 'card.less';
-@import 'eyes.less';
-@import 'hovers.less';
 @import 'game.less';
-@import 'start.less';
+@import 'button.less';
 
-.main {
+.main-block {
   color: balck;
   font-family: Arial;
-  background-image: url(../../public/images/background.png);
-  background-position: center center;
+  background-color: @background-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }

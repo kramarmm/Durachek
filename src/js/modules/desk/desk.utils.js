@@ -6,13 +6,13 @@ import { defend, attack } from '../desk/desk.consts';
 const suits = ['d', 's', 'h', 'c'];
 
 export default class Desk {
-  static getNextPlayersActions(current) {
+  static getNextPlayersAction(current) {
     return current === attack
       ? defend
       : attack;
   }
 
-  static getNextActivePlayers(current) {
+  static getNextActivePlayer(current) {
     return current === robot
       ? user
       : robot;
@@ -33,7 +33,7 @@ export default class Desk {
 
     const playerCards = state[player].cards;
 
-    const nextPlayersAction = Desk.getNextPlayersActions(
+    const nextPlayersAction = Desk.getNextPlayersAction(
       state.desk.playersAction
     );
 
