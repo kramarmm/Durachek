@@ -1,58 +1,22 @@
-import { GET_CARDS } from '../deck/deck.consts';
-import { USER_PUT_CARD, user } from './user.consts';
+import Player from '../player/player.reducers.delegator.js';
 
-import {
-  SET_ACTIVE_PLAYER,
-  TAKE_ALL_DESK_CARDS,
-  UPDATE_AVAILABLE_CARDS,
-} from '../desk/desk.consts';
+import { defend } from '../desk/desk.consts';
 
-export function cards(state = [], action) {
-  switch (action.type) {
-    case GET_CARDS:
-      if (action.payload.player !== user) {
-        return state;
-      }
+import { user as type } from './user.consts';
 
-      return [
-        ...state,
-        ...action.payload.cards,
-      ];
-    case USER_PUT_CARD:
-      const index = state.findIndex(
-        card => action.payload.card === card,
-      );
+const user = new Player(type);
 
-      return [
-        ...state.slice(0, index),
-        ...state.slice(index + 1, state.length),
-      ];
-    case TAKE_ALL_DESK_CARDS:
-      if (action.payload.activePlayer === user) {
-        return [
-          ...state,
-          ...action.payload.cards,
-        ];
-      }
-      return state;
-    default:
-      return state;
-  }
-}
+export const cards = (state = [], action) =>
+  user.cards(state, action);
 
+export const availableCards = (state = [], action) =>
+  user.availableCards(state, action);
 
-export function availableCards(state = [], action) {
-  switch (action.type) {
-    case SET_ACTIVE_PLAYER:
-    case UPDATE_AVAILABLE_CARDS: // ??? remove if not need
-      if (
-        action.payload.activePlayer === user ||
-        action.payload.player === user
-      ) {
-        return action.payload.availableCards;
-      }
-      return state;
-    default:
-      return state;
-  }
-}
+export const isActive = (state = false, action) =>
+  user.isActive(state, action);
+
+export const action = (state = defend, action) =>
+  user.action(state, action);
+
+export const willTakeAll = (state = false, action) =>
+  user.willTakeAll(state, action);

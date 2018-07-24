@@ -7,11 +7,11 @@ export const end = 'end';
 export const attack = 'attack';
 export const defend = 'defend';
 
-// actions
-export const START = 'START';
+// game state actions
+export const START_GAME = 'START_GAME';
+export const END_GAME = 'END_GAME';
+
+// table cards actions
+export const ADD_ATTACK_CARD = 'ADD_ATTACK_CARD';
+export const ADD_DEFEND_CARD = 'ADD_DEFEND_CARD';
 export const MOVE_TO_BREAK = 'MOVE_TO_BREAK';
-
-export const UPDATE_AVAILABLE_CARDS = 'UPDATE_AVAILABLE_CARDS';
-
-export const SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER';
-export const TAKE_ALL_DESK_CARDS = 'TAKE_ALL_DESK_CARDS';

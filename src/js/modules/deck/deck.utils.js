@@ -1,3 +1,7 @@
+import { ROBOT_GET_CARDS } from '../robot/robot.consts';
+
+import { user, USER_GET_CARDS } from '../user/user.consts';
+
 class DeckUtils {
   constructor() {
     this.values = [6, 7, 8, 9, 10, 11, 12, 13, 14];
@@ -43,6 +47,40 @@ class DeckUtils {
     }
 
     return shuffledDeck;
+  }
+
+  getCards(
+    player,
+    state,
+  ) {
+    const amount = this.getAvailableAmount(
+      state,
+      player,
+    );
+
+    const cards = amount
+      ? state.deck.slice(-amount)
+      : [];
+
+    return {
+      type: player === user
+        ? USER_GET_CARDS
+        : ROBOT_GET_CARDS,
+      payload: {
+        cards,
+        trumpCard: state.desk.trumpCard,
+      },
+    };
+  }
+
+  getAvailableAmount(state, player) {
+    const needCards = 6 - state[player].cards.length;
+
+    if (needCards <= 0) return 0;
+
+    return needCards <= state.deck.length
+      ? needCards
+      : state.deck.length;
   }
 }
 

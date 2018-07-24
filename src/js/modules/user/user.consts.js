@@ -2,4 +2,15 @@
 export const user = 'user';
 
 // actions
+export const USER_GET_CARDS = 'USER_GET_CARDS';
+
+export const USER_SET_ACTIVE = 'USER_SET_ACTIVE';
+export const USER_SET_UNACTIVE = 'USER_SET_UNACTIVE';
+
+export const USER_SET_ATACK_ACTION = 'USER_SET_ATACK_ACTION';
+export const USER_SET_DEFEND_ACTION = 'USER_SET_DEFEND_ACTION';
+
 export const USER_PUT_CARD = 'USER_PUT_CARD';
+
+export const USER_WILL_TAKE_ALL_CARDS = 'USER_WILL_TAKE_ALL_CARDS';
+export const USER_TAKE_ALL_CARDS = 'USER_TAKE_ALL_CARDS';

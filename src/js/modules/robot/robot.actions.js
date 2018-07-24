@@ -1,9 +1,9 @@
 import { ROBOT_PUT_CARD } from './robot.consts';
 
 import {
-  transferControlFromRobot,
+  transferControlToUser,
   moveToBreak,
-  takeAllDeskCards,
+  takeAllDeskUtilsCards,
 } from '../desk/desk.actions';
 
 import { attack } from '../desk/desk.consts';
@@ -22,12 +22,12 @@ export default function transferControlToRobot() {
         },
       });
 
-      dispatch(transferControlFromRobot());
+      dispatch(transferControlToUser());
     } else {
       if (state.desk.playersAction === attack) {
         dispatch(moveToBreak());
       } else {
-        dispatch(takeAllDeskCards());
+        dispatch(takeAllDeskUtilsCards());
       }
     }
   };

@@ -10,68 +10,68 @@ import { user } from '../user/user.consts';
 import { robot } from '../robot/robot.consts';
 import { defend, attack } from './desk.consts';
 
-class DeskScreen extends Component {
+class DeskUtilsScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      userMayGetCards: false,
+      userMayTakeCards: false,
       userMayFinishTurn: false,
     };
   }
 
-  componentWillMount() {
-    this.checkUserMayGetCards(this.props);
-    this.checkUserMayFinishTurn(this.props);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.checkUserMayGetCards(nextProps);
-    this.checkUserMayFinishTurn(nextProps);
-  }
-
-  checkUserMayGetCards(props) {
-    if (props.desk.cards.length) {
-      const {
-        activePlayer,
-        playersAction,
-      } = props.desk;
-
-      const nextUserMayGetCards = (
-        activePlayer === robot && playersAction === attack
-      ) || (
-        activePlayer === user && playersAction === defend
-      );
-
-      if (this.state.userMayGetCards !== nextUserMayGetCards) {
-        this.setState({ userMayGetCards: nextUserMayGetCards });
-      }
-    } else {
-      if (this.state.userMayGetCards) {
-        this.setState({ userMayGetCards: false });
-      }
-    }
-  }
-
-  checkUserMayFinishTurn(props) {
-    if (props.desk.cards.length) {
-      const { activePlayer, playersAction } = props.desk;
-
-      const nextUserMayFinishTurn = (
-        activePlayer === user && playersAction === attack
-      ) || (
-        activePlayer === robot && playersAction === defend
-      );
-
-      if (this.state.userMayFinishTurn !== nextUserMayFinishTurn) {
-        this.setState({ userMayFinishTurn: nextUserMayFinishTurn });
-      }
-    } else {
-      if (this.state.userMayFinishTurn) {
-        this.setState({ userMayFinishTurn: false });
-      }
-    }
-  }
+  // componentWillMount() {
+  //   this.checkUserMayGetCards(this.props);
+  //   this.checkUserMayFinishTurn(this.props);
+  // }
+  //
+  // componentWillReceiveProps(nextProps) {
+  //   this.checkUserMayGetCards(nextProps);
+  //   this.checkUserMayFinishTurn(nextProps);
+  // }
+  //
+  // checkUserMayGetCards(props) {
+  //   if (props.desk.cards.length) {
+  //     const {
+  //       activePlayer,
+  //       playersAction,
+  //     } = props.desk;
+  //
+  //     const nextUserMayGetCards = (
+  //       activePlayer === robot && playersAction === attack
+  //     ) || (
+  //       activePlayer === user && playersAction === defend
+  //     );
+  //
+  //     if (this.state.userMayTakeCards !== nextUserMayGetCards) {
+  //       this.setState({ userMayTakeCards: nextUserMayGetCards });
+  //     }
+  //   } else {
+  //     if (this.state.userMayTakeCards) {
+  //       this.setState({ userMayTakeCards: false });
+  //     }
+  //   }
+  // }
+  //
+  // checkUserMayFinishTurn(props) {
+  //   if (props.desk.cards.length) {
+  //     const { activePlayer, playersAction } = props.desk;
+  //
+  //     const nextUserMayFinishTurn = (
+  //       activePlayer === user && playersAction === attack
+  //     ) || (
+  //       activePlayer === robot && playersAction === defend
+  //     );
+  //
+  //     if (this.state.userMayFinishTurn !== nextUserMayFinishTurn) {
+  //       this.setState({ userMayFinishTurn: nextUserMayFinishTurn });
+  //     }
+  //   } else {
+  //     if (this.state.userMayFinishTurn) {
+  //       this.setState({ userMayFinishTurn: false });
+  //     }
+  //   }
+  // }
 
   render() {
     const {
@@ -83,7 +83,7 @@ class DeskScreen extends Component {
 
     return (
       <div className="main-block">
-        <div className="loo-table">
+        <div className="desk-wrapper">
           <div className="robots-card-block">
             {
               robot.cards.map(card => (
@@ -96,7 +96,7 @@ class DeskScreen extends Component {
           </div>
 
           {
-            desk.activePlayer === user ? (
+            user.isActive ? (
               <div className="message-block">
                 Your move, bitch!
               </div>
@@ -111,6 +111,7 @@ class DeskScreen extends Component {
                 </div>
               ) : null
             }
+
             {
               deck.length > 1 ? (
                 <div className="deck-back">
@@ -121,15 +122,11 @@ class DeskScreen extends Component {
 
             <div className="table-cards">
               {
-                desk.cards ? (
-                  desk.cards.map((card, i) => (
+                desk.defendCards ? (
+                  desk.defendCards.map((card, i) => (
                     <div
                       key={`${card.value}${card.suit}`}
-                      className={
-                        i % 2 === 1 && desk.attackCards.length < 2
-                          ? 'defend-cards'
-                          : 'attack-cards'
-                      }
+                      className="defend-cards"
                     >
                       <Card card={card} />
                     </div>
@@ -141,11 +138,11 @@ class DeskScreen extends Component {
 
           <div className="button-block">
             {
-              (this.state.userMayGetCards) ? (
+              (this.state.userMayTakeCards) ? (
                 <Button
                   name="взять"
                   className="btn btn-game"
-                  onClick={this.props.takeAllDeskCards}
+                  onClick={this.props.takeAllDeskUtilsCards}
                   activePlayer={desk.activePlayer}
                 />
               ) : (this.state.userMayFinishTurn) ? (
@@ -166,9 +163,11 @@ class DeskScreen extends Component {
                   key={`${card.value}${card.suit}`}
                   card={card}
                   onClick={this.props.userPutCard}
-                  available={user.availableCards
-                    && user.availableCards.indexOf(card) !== -1
-                    && desk.activePlayer === 'user'}
+                  available={
+                    user.isActive &&
+                    user.availableCards &&
+                    user.availableCards.indexOf(card) !== -1
+                  }
                 />
               ))
             }
@@ -187,4 +186,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   deskActions,
-)(DeskScreen);
+)(DeskUtilsScreen);

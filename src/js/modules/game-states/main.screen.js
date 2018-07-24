@@ -7,7 +7,7 @@ import ErrorScreen from '../error-handler/error.screen';
 
 import StartScreen from './start.screen.js';
 import EndScreen from './end.screen.js';
-import DeskScreen from '../desk/desk.screen.js';
+import DeskUtilsScreen from '../desk/desk.screen.js';
 
 const MainScreen = props => (
   <ErrorScreen>
@@ -19,7 +19,7 @@ const MainScreen = props => (
           ) : props.desk.gameState === end ? (
             <EndScreen />
           ) : props.desk.gameState === game ? (
-            <DeskScreen />
+            <DeskUtilsScreen />
           ) : null
         }
       </div>

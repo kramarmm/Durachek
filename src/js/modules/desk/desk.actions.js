@@ -1,88 +1,122 @@
 import DeckUtils from '../deck/deck.utils';
-import Desk from './desk.utils';
 
-import transferControlToRobot from '../robot/robot.actions';
-
-import { robot, ROBOT_PUT_CARD } from '../robot/robot.consts';
-import { user, USER_PUT_CARD } from '../user/user.consts';
-import { defend, attack } from '../desk/desk.consts';
+import DeskUtils from './desk.utils';
 
 import {
-  GET_TRUMP_CARD,
+  SET_TRUMP_CARD,
   SUFFLE_DECK,
-  GET_CARDS,
 } from '../deck/deck.consts';
 
 import {
-  START,
-  SET_ACTIVE_PLAYER,
+  defend,
+  attack,
+
+  START_GAME,
+
+  ADD_ATTACK_CARD,
+  ADD_DEFEND_CARD,
   MOVE_TO_BREAK,
-  TAKE_ALL_DESK_CARDS,
-  UPDATE_AVAILABLE_CARDS,
 } from './desk.consts';
 
+import transferControlToRobot from '../robot/robot.actions';
 
-function getCards(
-  quantity,
-  player,
-  deck,
-  trumpCard,
-) {
-  return {
-    type: GET_CARDS,
-    payload: {
-      player,
-      quantity,
-      cards: Desk.putCardsInRightOrder( // move it to reducers
-        deck.slice(-quantity),
-        trumpCard,
-      ),
-    },
-  };
-}
+import {
+  robot,
 
-function setActivePlayer(
+  ROBOT_PUT_CARD,
+  ROBOT_GET_CARDS,
+
+  ROBOT_SET_ACTIVE,
+  ROBOT_SET_UNACTIVE,
+
+  ROBOT_SET_ATACK_ACTION,
+  ROBOT_SET_DEFEND_ACTION,
+
+  ROBOT_WILL_TAKE_ALL_CARDS,
+  ROBOT_TAKE_ALL_CARDS,
+} from '../robot/robot.consts';
+
+import {
+  user,
+
+  USER_PUT_CARD,
+  USER_GET_CARDS,
+
+  USER_SET_ACTIVE,
+  USER_SET_UNACTIVE,
+
+  USER_SET_ATACK_ACTION,
+  USER_SET_DEFEND_ACTION,
+
+  USER_WILL_TAKE_ALL_CARDS,
+  USER_TAKE_ALL_CARDS,
+} from '../user/user.consts';
+
+function startTurn(
   activePlayer,
-  playersAction,
-  availableCards,
 ) {
-  return {
-    type: SET_ACTIVE_PLAYER,
-    payload: {
+  return (dispatch, getState) => {
+    const { trumpCard } = getState().desk;
+
+    const opponent = activePlayer === user
+      ? robot
+      : user;
+
+    dispatch(
+      DeckUtils.getCards(
+        opponent,
+        getState(),
+      )
+    );
+
+    dispatch(
+      DeckUtils.getCards(
+        activePlayer,
+        getState(),
+      )
+    );
+
+    DeskUtils.setActivePlayer(
+      dispatch,
       activePlayer,
-      playersAction,
-      availableCards,
-    },
+      getState()[activePlayer].cards,
+    );
+
+    DeskUtils.setAction(
+      dispatch,
+      activePlayer,
+    );
   };
 }
 
 export function getOutCards() {
   return (dispatch, getState) => {
-    dispatch({ type: START });
+    dispatch({ type: START_GAME });
 
     dispatch({
       type: SUFFLE_DECK,
       payload: DeckUtils.getShuffledDeck(),
     });
 
-    const trumpCard = getState().deck.slice(-1);
+    const state = getState();
+
+    const trumpCard = state.deck.slice(-1);
 
     dispatch({
-      type: GET_TRUMP_CARD,
-      payload: trumpCard,
+      type: SET_TRUMP_CARD,
+      payload: { trumpCard: trumpCard[0] },
     });
 
-    dispatch(getCards(6, user, getState().deck, trumpCard));
-    dispatch(getCards(6, robot, getState().deck, trumpCard));
+    const firstActivePlayer = DeskUtils.getFirstActivePlayer(state);
 
-    const state = getState();
-    const firstActivePlayer = Desk.setFirstActivePlayer(state);
-    const availableCards = state[firstActivePlayer].cards;
-
-    dispatch(setActivePlayer(firstActivePlayer, attack, availableCards));
+    dispatch(
+      startTurn(firstActivePlayer),
+    );
 
     if (firstActivePlayer === robot) {
-      dispatch(transferControlToRobot());
+      dispatch(
+        transferControlToRobot()
+      );
     }
   };
 }
@@ -91,69 +125,64 @@ export function userPutCard(card) {
   return (dispatch, getState) => {
     let state = getState();
 
-    if (state.desk.activePlayer === user) {
+    dispatch({
+      type: USER_PUT_CARD,
+      payload: { card },
+    });
+
+    if (state.user.action === attack) {
       dispatch({
-        type: USER_PUT_CARD,
-        payload: {
-          card,
-          playersAction: state.desk.playersAction,
-        },
+        type: ADD_ATTACK_CARD,
+        payload: { card },
       });
-
-      state = getState();
-
-      dispatch(setActivePlayer(
-        robot,
-        Desk.getNextPlayersAction(state.desk.playersAction),
-        Desk.getAvailableCards(state, robot),
-      ));
-      dispatch(transferControlToRobot());
+    } else {
+      dispatch({
+        type: ADD_DEFEND_CARD,
+        payload: { card },
+      });
     }
+
+    state = getState();
+
+    dispatch(
+      DeskUtils.setActivePlayer(
+        dispatch,
+        robot,
+        DeskUtils.getAvailableCards(state, robot),
+      )
+    );
+
+    dispatch(
+      transferControlToRobot()
+    );
   };
 }
 
-export function takeAllDeskCards() {
+export function takeAllCards(player) {
   return (dispatch, getState) => {
     const state = getState();
 
     const { deck, desk } = state;
 
-    const mergedCards = desk.cards.concat(
-      state[desk.activePlayer].cards,
-    );
+    const cards = [
+      ...desk.defendCards,
+      ...desk.attackCard,
+    ];
 
     dispatch({
-      type: TAKE_ALL_DESK_CARDS,
+      type: player === user
+        ? USER_TAKE_ALL_CARDS
+        : ROBOT_TAKE_ALL_CARDS,
       payload: {
-        activePlayer: desk.activePlayer,
-        cards: Desk.putCardsInRightOrder(
-          mergedCards,
-          desk.trumpCard,
-        ),
+        cards,
+        trumpCard: desk.trumpCard,
       },
     });
 
-    const nextActivePlayer = Desk.getNextActivePlayer(desk.activePlayer);
+    const nextActivePlayer = DeskUtils.getNextActivePlayer(state);
 
-    const needCards = 6 - state[nextActivePlayer].cards.length;
-    if (needCards > 0 && deck.length) {
-      dispatch(
-        getCards(
-          needCards,
-          nextActivePlayer,
-          deck,
-          desk.trumpCard,
-        )
-      );
-    }
-
-    const availableCards = getState()[nextActivePlayer].cards;
     dispatch(
-      setActivePlayer(
-        nextActivePlayer,
-        attack,
-        availableCards,
-      )
+      startTurn(nextActivePlayer),
     );
 
     if (nextActivePlayer === robot) {
@@ -172,13 +201,16 @@ export function moveToBreak() {
     dispatch({ type: MOVE_TO_BREAK });
 
     // Get cards for current activePlayer
-    const needCards = 6 - state[desk.activePlayer].cards.length;
-    if (needCards > 0 && deck.length) {
+    let needCards = 6 - state[desk.activePlayer].cards.length;
+    needCards = needCards <= deck.length
+      ? needCards
+      : deck.length;
+
+    if (needCards > 0) {
       dispatch(
-        getCards(
-          needCards,
+        DeckUtils.getCards(
           desk.activePlayer,
-          deck,
+          deck.slice(-needCards),
           desk.trumpCard,
         )
       );
@@ -188,15 +220,17 @@ export function moveToBreak() {
     }
 
     // Get cards for next activePlayer
-    const nextActivePlayer = Desk.getNextActivePlayer(desk.activePlayer);
-    const needCardsForNext = 6 - state[nextActivePlayer].cards.length;
+    const nextActivePlayer = DeskUtils.getNextActivePlayer(desk.activePlayer);
+    let needCardsForNext = 6 - state[nextActivePlayer].cards.length;
+    needCardsForNext = needCardsForNext <= deck.length
+      ? needCardsForNext
+      : deck.length;
 
-    if (needCardsForNext > 0 && deck.length) {
+    if (needCardsForNext > 0) {
       dispatch(
-        getCards(
-          needCardsForNext,
+        DeckUtils.getCards(
           nextActivePlayer,
-          deck,
+          deck.slice(-needCardsForNext),
           desk.trumpCard,
         )
       );
@@ -205,7 +239,7 @@ export function moveToBreak() {
     const availableCards = getState()[nextActivePlayer].cards;
 
     dispatch(
-      setActivePlayer(
+      DeskUtils.setActivePlayer(
         nextActivePlayer,
         attack,
         availableCards,
@@ -218,17 +252,17 @@ export function moveToBreak() {
   };
 }
 
-export function transferControlFromRobot() {
+export function transferControlToUser() {
   return (dispatch, getState) => {
     const state = getState();
 
-    const playersAction = Desk.getNextPlayersAction(
+    const playersAction = DeskUtils.getNextPlayersAction(
       state.desk.playersAction
     );
-    const availableCards = Desk.getAvailableCards(state, user);
+    const availableCards = DeskUtils.getAvailableCards(state, user);
 
     dispatch(
-      setActivePlayer(
+      DeskUtils.setActivePlayer(
         user,
         playersAction,
         availableCards,

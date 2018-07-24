@@ -1,83 +1,76 @@
-import { GET_TRUMP_CARD } from '../deck/deck.consts';
-import { USER_PUT_CARD, user } from '../user/user.consts';
-import { ROBOT_PUT_CARD, robot } from '../robot/robot.consts';
+import { SET_TRUMP_CARD } from '../deck/deck.consts';
+
+import { USER_TAKE_ALL_CARDS } from '../user/user.consts';
+
+import { ROBOT_TAKE_ALL_CARDS } from '../robot/robot.consts';
 
 import {
-  START,
+  START_GAME,
+  END_GAME,
+
+  ADD_ATTACK_CARD,
+  ADD_DEFEND_CARD,
   MOVE_TO_BREAK,
-  SET_ACTIVE_PLAYER,
-  TAKE_ALL_DESK_CARDS,
 
   start,
   game,
-  defend,
-  attack,
+  end,
 } from './desk.consts';
 
 export function gameState(state = start, action) {
   switch (action.type) {
-    case START:
+    case START_GAME:
       return game;
+
+    case END_GAME:
+      return end;
+
     default:
       return state;
   }
 }
 
-export function trumpCard(state = '', action) {
+export function trumpCard(state = {}, action) {
   switch (action.type) {
-    case GET_TRUMP_CARD:
-      return action.payload[0];
+    case SET_TRUMP_CARD:
+      return action.payload.trumpCard;
+
     default:
       return state;
   }
 }
 
-
-export function activePlayer(state = '', action) {
-  switch (action.type) {
-    case SET_ACTIVE_PLAYER:
-      return action.payload.activePlayer;
-    default:
-      return state;
-  }
-}
-
-export function playersAction(state = '', action) {
-  switch (action.type) {
-    case SET_ACTIVE_PLAYER:
-      return action.payload.playersAction;
-    default:
-      return state;
-  }
-}
-
-// move it to user and robot
 export function attackCards(state = [], action) {
   switch (action.type) {
-    case USER_PUT_CARD:
-    case ROBOT_PUT_CARD:
-      if (action.payload.playersAction === attack) {
-        return [...state, action.payload.card];
-      }
+    case ADD_ATTACK_CARD:
+      return [
+        ...state,
+        action.payload.card,
+      ];
 
-      return [];
     case MOVE_TO_BREAK:
-    case TAKE_ALL_DESK_CARDS:
+    case USER_TAKE_ALL_CARDS:
+    case ROBOT_TAKE_ALL_CARDS:
       return [];
+
     default:
       return state;
   }
 }
 
-export function cards(state = [], action) {
+export function defendCards(state = [], action) {
   switch (action.type) {
-    case USER_PUT_CARD:
-      return [...state, action.payload.card];
-    case ROBOT_PUT_CARD:
-      return [...state, action.payload.card];
+    case ADD_DEFEND_CARD:
+      return [
+        ...state,
+        action.payload.card,
+      ];
+
     case MOVE_TO_BREAK:
-    case TAKE_ALL_DESK_CARDS:
+    case USER_TAKE_ALL_CARDS:
+    case ROBOT_TAKE_ALL_CARDS:
       return [];
+
     default:
       return state;
   }
