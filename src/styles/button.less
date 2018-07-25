@@ -8,16 +8,13 @@ svg {
 
 svg rect {
   stroke-dasharray: 400, 0;
-  -webkit-transition: all 0.8s ease-in-out;
-  -moz-transition: all 0.8s ease-in-out;
-  -ms-transition: all 0.8s ease-in-out;
-  -o-transition: all 0.8s ease-in-out;
+  transition: all 0.6s ease-in-out;
 }
 
 svg rect, svg path, svg polyline {
   fill: none;
   stroke: @main-color;
-  stroke-width: 1;
+  stroke-width: 3;
 }
 
 .btn {
@@ -49,14 +46,7 @@ svg rect, svg path, svg polyline {
   stroke-width: 3;
   stroke-dasharray: 35, 245;
   stroke-dashoffset: 38;
-  -webkit-transition: all 0.8s ease-in-out;
-  -moz-transition: all 0.8s ease-in-out;
-  -ms-transition: all 0.8s ease-in-out;
-  -o-transition: all 0.8s ease-in-out;
-}
-
-.btn-start:hover {
-  stroke: @main-color;
+  transition: all 0.6s ease-in-out;
 }
 
 @keyframes press {
@@ -72,7 +62,7 @@ svg rect, svg path, svg polyline {
   color: @main-color-dark;
   animation-name: press;
   animation-direction: alternate;
-  animation-duration: .3s;
+  animation-duration: .1s;
 }
 
 .btn-game {

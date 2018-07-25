@@ -82,6 +82,11 @@ class DeckUtils {
       ? needCards
       : state.deck.length;
   }
+
+  isTheSameCard(card1, card2) {
+    return card1.value === card2.value &&
+      card1.suit === card2.suit;
+  }
 }
 
 export default new DeckUtils();

@@ -14,6 +14,7 @@ module.exports = {
     "new-cap": 0,
     "no-case-declarations": 0,
     "no-nested-ternary": 0,
+    "no-continue": 0,
     "no-underscore-dangle": 0,
     "import/no-unresolved": 0,
     "import/extensions": 0,

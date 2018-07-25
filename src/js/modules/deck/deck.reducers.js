@@ -3,15 +3,9 @@ import {
   SUFFLE_DECK,
 } from './deck.consts';
 
-import {
-  USER_PUT_CARD,
-  USER_GET_CARDS,
-} from '../user/user.consts';
+import { USER_GET_CARDS } from '../user/user.consts';
 
-import {
-  ROBOT_PUT_CARD,
-  ROBOT_GET_CARDS,
-} from '../robot/robot.consts';
+import { ROBOT_GET_CARDS } from '../robot/robot.consts';
 
 export function deck(state = [], action) {
   switch (action.type) {

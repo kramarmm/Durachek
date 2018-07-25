@@ -1,4 +1,4 @@
-import Player from '../player/player.reducers.delegator.js';
+import Player from '../player/player.reducers.js';
 
 import { defend } from '../desk/desk.consts';
 

@@ -19,6 +19,12 @@ export default function Card(props) {
     );
   }
 
+  if (props.placeholder) {
+    return (
+      <div className="card card-placeholder" />
+    );
+  }
+
   return (
     <span
       onClick={props.available && props.onClick ? () => props.onClick(props.card) : null}

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Card from './card.js';
-import Button from './button.js';
+import Card from './card';
+import Button from './button';
 
 import * as deskActions from './desk.actions';
+import { userPutCard } from '../user/user.actions';
 
 import { user } from '../user/user.consts';
 import { robot } from '../robot/robot.consts';
@@ -120,20 +121,57 @@ class DeskUtilsScreen extends Component {
               ) : 'deck is over'
             }
 
-            <div className="table-cards">
-              {
-                desk.defendCards ? (
-                  desk.defendCards.map((card, i) => (
-                    <div
-                      key={`${card.value}${card.suit}`}
-                      className="defend-cards"
-                    >
-                      <Card card={card} />
-                    </div>
-                  ))
-                ) : null
-              }
-            </div>
+            {
+              desk.attackCards.length ? (
+                <div
+                  className="table-cards"
+                  style={{ left: `calc((100% - ${desk.attackCards.length * 128}px) / 2)` }}
+                >
+                  {
+                    desk.attackCards.map(card => (
+                      <div
+                        key={`${card.value}${card.suit}`}
+                        className="attack-card"
+                      >
+                        <Card card={card} />
+                      </div>
+                    ))
+                  }
+                </div>
+              ) : null
+            }
+
+            {
+              // loop through attackCards for correct output cards position
+              desk.attackCards.length ? (
+                <div
+                  className="table-cards"
+                  style={{ left: `calc(5px + ((100% - ${desk.attackCards.length * 128}px) / 2))` }}
+                >
+                  {
+                    desk.attackCards.map((c, i) => {
+                      const card = desk.defendCards[i];
+
+                      return card ? (
+                        <div
+                          key={`${card.value}${card.suit}`}
+                          className="defend-card"
+                        >
+                          <Card card={card} />
+                        </div>
+                      ) : (
+                        <div
+                          key={`placeholder-${c.value}${c.suit}`}
+                          className="defend-card"
+                        >
+                          <Card placeholder />
+                        </div>
+                      );
+                    })
+                  }
+                </div>
+              ) : null
+            }
           </div>
 
           <div className="button-block">
@@ -185,5 +223,8 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  deskActions,
+  {
+    ...deskActions,
+    userPutCard,
+  },
 )(DeskUtilsScreen);

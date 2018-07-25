@@ -1,3 +1,4 @@
+import DeckUtils from '../deck/deck.utils.js';
 import DeskUtils from '../desk/desk.utils.js';
 
 import { defend, attack } from '../desk/desk.consts';
@@ -32,7 +33,7 @@ export default class Player {
 
       case actionTypes[`${this.TYPE}_PUT_CARD`]:
         const index = state.findIndex(
-          card => action.payload.card === card,
+          card => DeckUtils.isTheSameCard(card, action.payload.card),
         );
 
         return [
@@ -70,10 +71,10 @@ export default class Player {
   action(state, action) {
     switch (action.type) {
       case actionTypes[`${this.TYPE}_SET_ATACK_ACTION`]:
-          return attack;
+        return attack;
 
       case actionTypes[`${this.TYPE}_SET_DEFEND_ACTION`]:
-          return defend;
+        return defend;
 
       default:
         return state;
@@ -83,7 +84,7 @@ export default class Player {
   willTakeAll(state, action) {
     switch (action.type) {
       case actionTypes[`${this.TYPE}_WILL_TAKE_ALL_CARDS`]:
-          return action.payload.state;
+        return action.payload.state;
 
       default:
         return state;

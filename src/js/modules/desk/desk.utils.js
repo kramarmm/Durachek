@@ -122,20 +122,24 @@ export default class DeskUtils {
 
     const selectedCards = [];
 
-    if (desk.attackCards.length && state[player].action === defend) {
-      for (let i = 0; i < desk.attackCards.length; i++) {
+    const notBeatenCards = desk.attackCards.slice(
+      desk.attackCards.lenth,
+    );
+
+    if (notBeatenCards.length && state[player].action === defend) {
+      for (let i = 0; i < notBeatenCards.length; i++) {
         for (let j = 0; j < playerCards.length; j++) {
           if (
             playerCards[j].suit === trumpSuit &&
-            desk.attackCards[i].suit !== trumpSuit
+            notBeatenCards[i].suit !== trumpSuit
           ) {
             selectedCards.push(playerCards[j]);
             continue;
           }
 
           if (
-            playerCards[j].suit === desk.attackCards[i].suit &&
-            playerCards[j].value > desk.attackCards[i].value
+            playerCards[j].suit === notBeatenCards[i].suit &&
+            playerCards[j].value > notBeatenCards[i].value
           ) {
             selectedCards.push(playerCards[j]);
           }
@@ -145,10 +149,15 @@ export default class DeskUtils {
       return selectedCards;
     }
 
-    if (desk.defendCards.length && state[player].action === attack) {
-      for (let i = 0; i < desk.defendCards.length; i++) {
+    const cards = [
+      ...desk.defendCards,
+      ...desk.attackCards,
+    ];
+
+    if (cards.length && state[player].action === attack) {
+      for (let i = 0; i < cards.length; i++) {
         for (let j = 0; j < playerCards.length; j++) {
-          if (playerCards[j].value === desk.defendCards[i].value) {
+          if (playerCards[j].value === cards[i].value) {
             selectedCards.push(playerCards[j]);
           }
         }

@@ -36,19 +36,19 @@
 }
 
 .table-cards {
-  margin-right: 25px;
-  margin-left: calc(~'60% - 440px');
+  position: absolute;
   display: flex;
 }
 
-.defend-cards {
-  position: relative;
-  left: -85px;
-  transform: rotate(22deg);
+.defend-card {
+  transform: rotate(25deg);
+  margin-right: 28px;
+  margin-top: 8px;
+  z-index: 5;
 }
 
-.attack-cards {
-  margin: 0 -50px;
+.attack-card {
+  margin-right: 28px;
 }
 
 .button-block {
@@ -57,8 +57,11 @@
 
 .message-block {
   position: absolute;
-  top: 410px;
+  bottom: 200px;
   letter-spacing: @message-letter-spacing;
   font-size: @message-font-size;
-  color: @main-color-light;
+  color: @main-color;
+  padding: 8px 17px;
+  border-left: 2px solid @main-color;
+  border-right: 2px solid @main-color;
 }
