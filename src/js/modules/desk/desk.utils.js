@@ -114,11 +114,7 @@ export default class DeskUtils {
 
     const playerCards = state[player].cards;
 
-    const nextPlayersAction = DeskUtils.getNextPlayersAction(
-      state.desk.playersAction
-    );
-
-    if (!desk.defendCards.length && nextPlayersAction === attack) {
+    if (!desk.defendCards.length && state[player].action === attack) {
       return playerCards;
     }
 
@@ -126,7 +122,7 @@ export default class DeskUtils {
 
     const selectedCards = [];
 
-    if (desk.attackCards.length && nextPlayersAction === defend) {
+    if (desk.attackCards.length && state[player].action === defend) {
       for (let i = 0; i < desk.attackCards.length; i++) {
         for (let j = 0; j < playerCards.length; j++) {
           if (
@@ -149,7 +145,7 @@ export default class DeskUtils {
       return selectedCards;
     }
 
-    if (desk.defendCards.length && nextPlayersAction === attack) {
+    if (desk.defendCards.length && state[player].action === attack) {
       for (let i = 0; i < desk.defendCards.length; i++) {
         for (let j = 0; j < playerCards.length; j++) {
           if (playerCards[j].value === desk.defendCards[i].value) {

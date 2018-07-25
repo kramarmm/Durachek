@@ -26,9 +26,6 @@ import {
   ROBOT_PUT_CARD,
   ROBOT_GET_CARDS,
 
-  ROBOT_SET_ACTIVE,
-  ROBOT_SET_UNACTIVE,
-
   ROBOT_SET_ATACK_ACTION,
   ROBOT_SET_DEFEND_ACTION,
 
@@ -41,9 +38,6 @@ import {
 
   USER_PUT_CARD,
   USER_GET_CARDS,
-
-  USER_SET_ACTIVE,
-  USER_SET_UNACTIVE,
 
   USER_SET_ATACK_ACTION,
   USER_SET_DEFEND_ACTION,
@@ -254,19 +248,10 @@ export function moveToBreak() {
 
 export function transferControlToUser() {
   return (dispatch, getState) => {
-    const state = getState();
-
-    const playersAction = DeskUtils.getNextPlayersAction(
-      state.desk.playersAction
-    );
-    const availableCards = DeskUtils.getAvailableCards(state, user);
-
-    dispatch(
-      DeskUtils.setActivePlayer(
-        user,
-        playersAction,
-        availableCards,
-      )
+    DeskUtils.setActivePlayer(
+      dispatch,
+      user,
+      DeskUtils.getAvailableCards(getState(), user),
     );
   };
 }
