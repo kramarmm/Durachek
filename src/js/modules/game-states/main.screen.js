@@ -5,27 +5,67 @@ import { start, game, end } from '../desk/desk.consts.js';
 
 import ErrorScreen from '../error-handler/error.screen';
 
+
+import SmallDimensions from './small-dimensions.screen';
 import StartScreen from './start.screen.js';
 import EndScreen from './end.screen.js';
 import DeskUtilsScreen from '../desk/desk.screen.js';
 
-const MainScreen = props => (
-  <ErrorScreen>
-    <div className="main">
-      <div className="wrapper">
-        {
-          props.desk.gameState === start ? (
-            <StartScreen />
-          ) : props.desk.gameState === end ? (
-            <EndScreen />
-          ) : props.desk.gameState === game ? (
-            <DeskUtilsScreen />
-          ) : null
-        }
-      </div>
-    </div>
-  </ErrorScreen>
-);
+class MainScreen extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      SmallDimensions: false,
+    };
+
+    this.onResize = this.onResize.bind(this);
+  }
+
+  componentWillMount() {
+    this.onResize();
+
+    window.addEventListener(
+      'resize',
+      this.onResize,
+    );
+  }
+
+  onResize() {
+    this.setState({
+      SmallDimensions: window.innerWidth < 850 ||
+      window.innerHeight < 800,
+    });
+  }
+
+  render() {
+    const {
+      desk,
+    } = this.props;
+
+    return (
+      <ErrorScreen>
+        <div className="main">
+          <div className="wrapper">
+            {
+              this.state.SmallDimensions ? (
+                <SmallDimensions />
+              ) : (
+                desk.gameState === start ? (
+                  <StartScreen />
+                ) : desk.gameState === end ? (
+                  <EndScreen />
+                ) : desk.gameState === game ? (
+                  <DeskUtilsScreen />
+                ) : null
+              )
+            }
+          </div>
+        </div>
+      </ErrorScreen>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   desk: state.desk,

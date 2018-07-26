@@ -3,7 +3,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  min-width: 800px;
+  min-width: 850px;
+  min-height: 800px;
   width: 100vw;
   height: 100vh;
 }
@@ -55,13 +56,37 @@
   margin-bottom: -80px;
 }
 
+.font-lg {
+  font-size: @font-lg;
+  letter-spacing: @letter-spacing;
+}
+
+.text-color-main {
+  color: @main-color;
+}
+
 .message-block {
   position: absolute;
   bottom: 200px;
-  letter-spacing: @message-letter-spacing;
-  font-size: @message-font-size;
   color: @main-color;
+  letter-spacing: @letter-spacing;
+  font-size: font-m;
   padding: 8px 17px;
   border-left: 2px solid @main-color;
   border-right: 2px solid @main-color;
+}
+
+.small-dimensions-block {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.sad-icon {
+  height: 140px;
+  margin-top: 50px;
 }
