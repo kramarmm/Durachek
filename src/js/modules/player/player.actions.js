@@ -9,6 +9,9 @@ import {
 
 import { startTurn } from '../desk/desk.actions';
 
+import { setMessage } from '../message/message.actions';
+import { messageTypes } from '../message/message.consts';
+
 import { transferControlToRobot } from '../robot/robot.actions';
 import { transferControlToUser } from '../user/user.actions';
 
@@ -61,11 +64,11 @@ export function putCard(
       DeskUtils.getAvailableCards(state, opponent),
     );
 
-    dispatch(
-      opponent === robot
-        ? transferControlToRobot()
-        : transferControlToUser()
-    );
+    if (opponent === robot) {
+      dispatch(
+        transferControlToRobot()
+      );
+    }
   };
 }
 
@@ -77,7 +80,7 @@ export function takeAllCards(player) {
 
     const cards = [
       ...desk.defendCards,
-      ...desk.attackCard,
+      ...desk.attackCards,
     ];
 
     dispatch({
@@ -97,6 +100,10 @@ export function takeAllCards(player) {
     );
 
     if (nextActivePlayer === robot) {
+      dispatch(
+        setMessage(messageTypes.userDefends),
+      );
+
       dispatch(
         transferControlToRobot(),
       );

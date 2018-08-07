@@ -10,9 +10,9 @@ export const userPutCard = card =>
       putCard(user, card),
     );
 
-export const transferControlToUser = () => (dispatch, getState) =>
-  DeskUtils.setActivePlayer(
-    dispatch,
-    user,
-    DeskUtils.getAvailableCards(getState(), user),
-  );
+// export const transferControlToUser = () => (dispatch, getState) => // TODO: remove it if it not need
+//   DeskUtils.setActivePlayer(
+//     dispatch,
+//     user,
+//     DeskUtils.getAvailableCards(getState(), user),
+//   );

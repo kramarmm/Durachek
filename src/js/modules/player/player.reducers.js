@@ -26,7 +26,7 @@ export default class Player {
           ...action.payload.cards,
         ];
 
-        return DeskUtils.putCardsInRightOrder( // move it to reducers
+        return DeskUtils.putCardsInRightOrder(
           updatedCards,
           action.payload.trumpCard,
         );

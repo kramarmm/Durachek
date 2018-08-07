@@ -65,10 +65,18 @@ svg rect, svg path, svg polyline {
   animation-duration: .1s;
 }
 
+.glowed {
+  box-shadow: 0px 0px 10px @glow;
+
+  &:hover {
+   box-shadow: 0px 0px 10px @glow-light;
+  }
+}
+
 .btn-game {
   width: 80px;
   height: 40px;
-  font-size: 1rem;
+  font-size: .9rem;
   position: fixed;
   bottom: 160px;
   right: 20px;
@@ -76,9 +84,16 @@ svg rect, svg path, svg polyline {
   color: @main-color;
   background: @background-color;
   border: 1px solid @main-color;
+  transition: all .2s;
 }
 
-.btn-game:hover {
+.btn-game:hover:enabled {
+  box-shadow: 0px 0px 5px @glow-lighter;
   background-color: @background-color-hover;
-  border: 1px solid @main-color-light;
+}
+
+.btn-game:disabled {
+  cursor: default;
+  border: 1px solid @main-color-disabled;
+  color: @main-color-disabled;
 }

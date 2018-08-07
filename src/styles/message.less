@@ -1,0 +1,40 @@
+.message {
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: @overlay;
+  transition: .05s ease-in-out;
+}
+
+@keyframes bubbling {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1.4, 1.4);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.message-text {
+  color: @white;
+  font-size: @font-lg;
+  animation-name: bubbling;
+  border-right: 3px solid @gray;
+  border-left: 3px solid @gray;
+  letter-spacing: @letter-spacing;
+  padding: 0 14px;
+  transition: none;
+  animation-duration: .35s;
+  animation-timing-function: ease-in-out;
+}

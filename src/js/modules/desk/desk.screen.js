@@ -3,9 +3,13 @@ import { connect } from 'react-redux';
 
 import Card from './card';
 import Button from './button';
+import Message from '../message/message';
 
-import * as deskActions from './desk.actions';
+import { moveToBreak } from './desk.actions';
+import DeskUtils from './desk.utils';
+
 import { userPutCard } from '../user/user.actions';
+import { takeAllCards } from '../player/player.actions';
 
 import { user } from '../user/user.consts';
 import { robot } from '../robot/robot.consts';
@@ -19,60 +23,38 @@ class DeskUtilsScreen extends Component {
       userMayTakeCards: false,
       userMayFinishTurn: false,
     };
+
+    this.userTakeAllCards = this.props.takeAllCards.bind(this, user);
   }
 
-  // componentWillMount() {
-  //   this.checkUserMayGetCards(this.props);
-  //   this.checkUserMayFinishTurn(this.props);
-  // }
-  //
-  // componentWillReceiveProps(nextProps) {
-  //   this.checkUserMayGetCards(nextProps);
-  //   this.checkUserMayFinishTurn(nextProps);
-  // }
-  //
-  // checkUserMayGetCards(props) {
-  //   if (props.desk.cards.length) {
-  //     const {
-  //       activePlayer,
-  //       playersAction,
-  //     } = props.desk;
-  //
-  //     const nextUserMayGetCards = (
-  //       activePlayer === robot && playersAction === attack
-  //     ) || (
-  //       activePlayer === user && playersAction === defend
-  //     );
-  //
-  //     if (this.state.userMayTakeCards !== nextUserMayGetCards) {
-  //       this.setState({ userMayTakeCards: nextUserMayGetCards });
-  //     }
-  //   } else {
-  //     if (this.state.userMayTakeCards) {
-  //       this.setState({ userMayTakeCards: false });
-  //     }
-  //   }
-  // }
-  //
-  // checkUserMayFinishTurn(props) {
-  //   if (props.desk.cards.length) {
-  //     const { activePlayer, playersAction } = props.desk;
-  //
-  //     const nextUserMayFinishTurn = (
-  //       activePlayer === user && playersAction === attack
-  //     ) || (
-  //       activePlayer === robot && playersAction === defend
-  //     );
-  //
-  //     if (this.state.userMayFinishTurn !== nextUserMayFinishTurn) {
-  //       this.setState({ userMayFinishTurn: nextUserMayFinishTurn });
-  //     }
-  //   } else {
-  //     if (this.state.userMayFinishTurn) {
-  //       this.setState({ userMayFinishTurn: false });
-  //     }
-  //   }
-  // }
+  componentWillMount() {
+    this.checkUserMayGetCards(this.props);
+    this.checkUserMayFinishTurn(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.checkUserMayGetCards(nextProps);
+    this.checkUserMayFinishTurn(nextProps);
+  }
+
+  checkUserMayGetCards(props) {
+    this.setState({
+      userMayTakeCards: props.desk.attackCards.length
+        ? props.user.isActive
+          && props.user.action === defend
+          && !DeskUtils.isPlayerAlreadyTookCards(props.user, props.desk)
+        : false
+    });
+  }
+
+  checkUserMayFinishTurn(props) {
+    this.setState({
+      userMayFinishTurn: props.desk.attackCards.length
+        ? props.user.isActive
+          && props.user.action === attack
+        : false
+    });
+  }
 
   render() {
     const {
@@ -96,13 +78,7 @@ class DeskUtilsScreen extends Component {
             }
           </div>
 
-          {
-            user.isActive ? (
-              <div className="message-block">
-                Your move, bitch!
-              </div>
-            ) : null
-          }
+          <Message text={desk.message} />
 
           <div className="deck">
             {
@@ -176,21 +152,34 @@ class DeskUtilsScreen extends Component {
 
           <div className="button-block">
             {
-              (this.state.userMayTakeCards) ? (
+              user.action === defend ? (
                 <Button
-                  name="взять"
+                  name="take"
                   className="btn btn-game"
-                  onClick={this.props.takeAllDeskUtilsCards}
-                  activePlayer={desk.activePlayer}
+                  className={
+                    `btn btn-game ${
+                       !user.availableCards.length
+                        ? 'glowed'
+                        : ''
+                     }`
+                   }
+                  onClick={this.userTakeAllCards}
+                  disabled={!this.state.userMayTakeCards}
                 />
-              ) : (this.state.userMayFinishTurn) ? (
+              ) : (
                 <Button
-                  name="отбой"
-                  className="btn btn-game"
+                  name="finish turn"
+                  className={
+                    `btn btn-game ${
+                       !user.availableCards.length
+                        ? 'glowed'
+                        : ''
+                     }`
+                   }
                   onClick={this.props.moveToBreak}
-                  activePlayer={desk.activePlayer}
+                  disabled={!this.state.userMayFinishTurn}
                 />
-              ) : null
+              )
             }
           </div>
 
@@ -217,14 +206,13 @@ class DeskUtilsScreen extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { ...state }; // do it with selectors
-}
+const mapStateToProps = state => ({ ...state });
 
 export default connect(
   mapStateToProps,
   {
-    ...deskActions,
+    moveToBreak,
     userPutCard,
+    takeAllCards,
   },
 )(DeskUtilsScreen);

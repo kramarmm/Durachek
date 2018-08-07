@@ -6,7 +6,7 @@ class SmallDimensions extends Component {
       <div className="main-block">
         <div className="small-dimensions-block">
           <div className="text-color-main font-lg">
-            Your screen is very small :(
+            Your screen is very small
           </div>
           <img
             className="sad-icon"

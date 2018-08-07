@@ -35,7 +35,7 @@ import { defend, attack } from '../desk/desk.consts';
 const suits = ['d', 's', 'h', 'c'];
 
 export default class DeskUtils {
-  static setAction(
+  static setActions(
     dispatch,
     activePlayer,
   ) {
@@ -68,7 +68,7 @@ export default class DeskUtils {
       },
     });
 
-    return dispatch({
+    dispatch({
       type: activePlayer === user
         ? ROBOT_SET_UNACTIVE
         : USER_SET_UNACTIVE,
@@ -187,5 +187,11 @@ export default class DeskUtils {
     return robotIsFirst
       ? robot
       : user;
+  }
+
+  static isPlayerAlreadyTookCards(player, desk) {
+    return player.isActive
+      ? (desk.cards - desk.attackCards) > 1
+      : false;
   }
 }

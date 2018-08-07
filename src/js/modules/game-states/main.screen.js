@@ -33,8 +33,8 @@ class MainScreen extends React.Component {
 
   onResize() {
     this.setState({
-      SmallDimensions: window.innerWidth < 850 ||
-      window.innerHeight < 800,
+      SmallDimensions: window.innerWidth < 500 || // TODO: 800
+      window.innerHeight < 500,
     });
   }
 

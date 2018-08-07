@@ -4,6 +4,8 @@ import { USER_TAKE_ALL_CARDS } from '../user/user.consts';
 
 import { ROBOT_TAKE_ALL_CARDS } from '../robot/robot.consts';
 
+import { message } from '../message/message.reducers';
+
 import {
   START_GAME,
   END_GAME,
@@ -11,6 +13,8 @@ import {
   ADD_ATTACK_CARD,
   ADD_DEFEND_CARD,
   MOVE_TO_BREAK,
+
+  SET_MESSAGE,
 
   start,
   game,
