@@ -114,5 +114,9 @@ export const moveToBreak = () => (dispatch, getState) => {
     dispatch(
       transferControlToRobot()
     );
+  } else {
+    dispatch(
+      setMessage(messageTypes.userAttacks),
+    );
   }
 }

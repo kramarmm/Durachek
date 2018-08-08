@@ -107,6 +107,10 @@ export function takeAllCards(player) {
       dispatch(
         transferControlToRobot(),
       );
+    } else {
+      dispatch(
+        setMessage(messageTypes.userAttacks),
+      );
     }
   };
 }
