@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import Card from './card';
@@ -15,16 +15,20 @@ import { user } from '../user/user.consts';
 import { robot } from '../robot/robot.consts';
 import { defend, attack } from './desk.consts';
 
-class DeskUtilsScreen extends Component {
+class DeskScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       userMayTakeCards: false,
       userMayFinishTurn: false,
+      visibleCardsLength: false,
     };
 
     this.userTakeAllCards = this.props.takeAllCards.bind(this, user);
+
+    this.showCardsLength = this.toggleCardsLength.bind(this, true);
+    this.hideCardsLength = this.toggleCardsLength.bind(this, false);
   }
 
   componentWillMount() {
@@ -56,6 +60,12 @@ class DeskUtilsScreen extends Component {
     });
   }
 
+  toggleCardsLength(state) {
+    this.setState({
+      visibleCardsLength: state,
+    });
+  }
+
   render() {
     const {
       robot,
@@ -64,15 +74,22 @@ class DeskUtilsScreen extends Component {
       deck,
     } = this.props;
 
+    const usersCardsSpacing = (700 / user.cards.length) - 95;
+    const robotsCardsSpacing = (700 / robot.cards.length) - 95;
+
     return (
       <div className="main-block">
         <div className="desk-wrapper">
-          <div className="robots-card-block">
+          <div className="cards-block robots-cards-block">
             {
-              robot.cards.map(card => (
+              robot.cards.map((card, i) => (
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
+                  style={{
+                    position: 'relative',
+                      left: `${robotsCardsSpacing * i}px`,
+                  }}
                 />
               ))
             }
@@ -86,15 +103,34 @@ class DeskUtilsScreen extends Component {
                 <div className="trump-card">
                   <Card card={desk.trumpCard} />
                 </div>
-              ) : null
+              ) : (
+                <span>
+                  &#9760;
+                </span>
+              )
             }
 
             {
               deck.length > 1 ? (
-                <div className="deck-back">
-                  <Card back />
-                </div>
-              ) : 'deck is over'
+                <Fragment>
+                  <div
+                    className="deck-back"
+                    onMouseEnter={this.showCardsLength}
+                    onTouchStart={this.showCardsLength}
+                    onMouseLeave={this.hideCardsLength}
+                    onTouchEnd={this.hideCardsLength}
+                  >
+                    <Card back />
+                  </div>
+                  {
+                    this.state.visibleCardsLength ? (
+                      <span className="cards-left-hint">
+                        {deck.length} cards left
+                      </span>
+                    ) : null
+                  }
+                </Fragment>
+              ) : null
             }
 
             {
@@ -183,13 +219,17 @@ class DeskUtilsScreen extends Component {
             }
           </div>
 
-          <div className="users-card-block">
+          <div className="cards-block users-cards-block">
             {
-              user.cards.map(card => (
+              user.cards.map((card, i) => (
                 <Card
                   key={`${card.value}${card.suit}`}
                   card={card}
                   onClick={this.props.userPutCard}
+                  style={{
+                    position: 'relative',
+                      left: `${usersCardsSpacing * i}px`,
+                  }}
                   available={
                     user.isActive &&
                     user.availableCards &&
@@ -215,4 +255,4 @@ export default connect(
     userPutCard,
     takeAllCards,
   },
-)(DeskUtilsScreen);
+)(DeskScreen);

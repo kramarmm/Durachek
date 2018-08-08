@@ -9,7 +9,7 @@ import ErrorScreen from '../error-handler/error.screen';
 import SmallDimensions from './small-dimensions.screen';
 import StartScreen from './start.screen.js';
 import EndScreen from './end.screen.js';
-import DeskUtilsScreen from '../desk/desk.screen.js';
+import DeskScreen from '../desk/desk.screen.js';
 
 class MainScreen extends React.Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class MainScreen extends React.Component {
                 ) : desk.gameState === end ? (
                   <EndScreen />
                 ) : desk.gameState === game ? (
-                  <DeskUtilsScreen />
+                  <DeskScreen />
                 ) : null
               )
             }

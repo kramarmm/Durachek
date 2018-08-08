@@ -29,6 +29,7 @@ export default function Card(props) {
     <span
       onClick={props.available && props.onClick ? () => props.onClick(props.card) : null}
       className={props.available ? 'available' : ''}
+      style={props.style}
     >
       <div className="card">
         <div className="card-value">

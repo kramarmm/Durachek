@@ -9,16 +9,25 @@
   height: 100vh;
 }
 
-.robots-card-block {
+.cards-block {
+  position: absolute;
+  width: 700px;
   display: flex;
-  justify-content: center;
-  margin-top: 25px;
 }
 
-.users-card-block {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
+.robots-cards-block {
+  top: 20px;
+}
+
+.users-cards-block {
+  bottom: 10px;
+}
+
+.cards-left-hint {
+  position: absolute;
+  top: 160px;
+  left: 50px;
+  color: @hint;
 }
 
 .deck {
@@ -26,6 +35,8 @@
   display: flex;
   justify-content: flex-start;
   max-height: 180px;
+  position: relative;
+  top: calc(~'50% - 75px');
 }
 
 .trump-card {
