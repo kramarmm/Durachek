@@ -9,6 +9,7 @@ import {
 
 import {
   START_GAME,
+  END_GAME,
   MOVE_TO_BREAK,
 } from './desk.consts';
 
@@ -23,6 +24,7 @@ import { user } from '../user/user.consts';
 
 export const startTurn = activePlayer => (dispatch, getState) => {
   const firstTaker = activePlayer || user;
+
   const secondTaker = activePlayer
     ? activePlayer === user
       ? robot
@@ -42,6 +44,15 @@ export const startTurn = activePlayer => (dispatch, getState) => {
       getState(),
     )
   );
+
+  const state = getState();
+
+  if (
+    !state[firstTaker].cards.length
+    || !state[secondTaker].cards.length
+  ) {
+    return dispatch({ type: END_GAME });
+  }
 
   if (!activePlayer) {
     activePlayer = DeskUtils.getFirstActivePlayer(

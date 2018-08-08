@@ -1,4 +1,4 @@
-import { ROBOT_GET_CARDS } from '../robot/robot.consts';
+import { robot, ROBOT_GET_CARDS } from '../robot/robot.consts';
 
 import { user, USER_GET_CARDS } from '../user/user.consts';
 
@@ -74,7 +74,19 @@ class DeckUtils {
   }
 
   getAvailableAmount(state, player) {
-    const needCards = 6 - state[player].cards.length;
+    let needCards = 6 - state[player].cards.length;
+
+    const opponent = player === user
+      ? robot
+      : user;
+
+    if (
+      !state[player].cards.length
+      && !state[opponent].cards.length
+      && state.deck.length < 12
+    ) {
+      needCards = Math.round(state.deck.length / 2);
+    }
 
     if (needCards <= 0) return 0;
 

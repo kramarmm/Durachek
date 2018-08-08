@@ -114,8 +114,14 @@ export default class DeskUtils {
 
     const playerCards = state[player].cards;
 
-    if (!desk.defendCards.length && state[player].action === attack) {
-      return playerCards;
+    if (state[player].action === attack) {
+      if (!desk.defendCards.length) {
+        return playerCards;
+      }
+
+      if (desk.attackCards.length === 6) {
+        return [];
+      }
     }
 
     const trumpSuit = state.desk.trumpCard.suit;

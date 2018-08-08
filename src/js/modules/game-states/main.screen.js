@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { start, game, end } from '../desk/desk.consts.js';
@@ -11,7 +11,7 @@ import StartScreen from './start.screen.js';
 import EndScreen from './end.screen.js';
 import DeskScreen from '../desk/desk.screen.js';
 
-class MainScreen extends React.Component {
+class MainScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -47,6 +47,14 @@ class MainScreen extends React.Component {
       <ErrorScreen>
         <div className="main">
           <div className="wrapper">
+            <a
+              href="https://github.com/kramarmm/Durachek"
+              target="_blank"
+              className="github"
+              rel="noopener noreferrer"
+            >
+              <img src="./images/github.png" />
+            </a>
             {
               this.state.SmallDimensions ? (
                 <SmallDimensions />

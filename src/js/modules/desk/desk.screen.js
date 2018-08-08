@@ -74,8 +74,8 @@ class DeskScreen extends Component {
       deck,
     } = this.props;
 
-    const usersCardsSpacing = (700 / user.cards.length) - 95;
-    const robotsCardsSpacing = (700 / robot.cards.length) - 95;
+    const usersCardsSpacing = (650 / user.cards.length) - 95;
+    const robotsCardsSpacing = (650 / robot.cards.length) - 95;
 
     return (
       <div className="main-block">
