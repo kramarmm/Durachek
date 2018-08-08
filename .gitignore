@@ -1,6 +1,7 @@
 node_modules/
 npm-debug.*.*
 npm-debug.log
+public/bundle.js
 psd/
 *.js.map
 .DS_Store

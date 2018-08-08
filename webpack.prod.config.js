@@ -1,24 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
-  devtool: 'source-map',
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-  entry: [
-    'webpack-hot-middleware/client?http://localhost:3000',
-    './src/js/index.js',
-  ],
+module.exports = {
+  entry: './src/js/index.js',
 
   output: {
     path: __dirname + '/public',
     filename: 'bundle.js',
-    publicPath: 'http://localhost:3000/',
-    hotUpdateChunkFilename: 'hot/[id].[hash].hot-update.js',
-    hotUpdateMainFilename: 'hot/[hash].hot-update.json',
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new UglifyJsPlugin({
+      test: /\.js($|\?)/i,
+      exclude: /(node_modules)/,
+    })
   ],
 
   module: {

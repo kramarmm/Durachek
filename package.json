@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "postinstall": "webpack -p --progress",
+    "postinstall": "webpack -p --config ./webpack.prod.config.js --progress",
     "start": "node server.js",
     "dev": "node dev-server.js"
   },
@@ -48,7 +48,9 @@
     "postcss-loader": "2.0.6",
     "react-hot-loader": "3.0.0-beta.6",
     "regenerator-runtime": "0.10.5",
+    "serve-favicon": "2.5.0",
     "style-loader": "0.18.2",
+    "uglifyjs-webpack-plugin": "1.2.7",
     "webpack": "2.6.0",
     "webpack-dev-middleware": "1.10.2",
     "webpack-hot-middleware": "2.18.0"
