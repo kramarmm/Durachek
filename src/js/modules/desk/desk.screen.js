@@ -78,7 +78,7 @@ class DeskUtilsScreen extends Component {
             }
           </div>
 
-          <Message text={desk.message} />
+          <Message message={desk.message} />
 
           <div className="deck">
             {

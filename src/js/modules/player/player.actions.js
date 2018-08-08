@@ -101,7 +101,7 @@ export function takeAllCards(player) {
 
     if (nextActivePlayer === robot) {
       dispatch(
-        setMessage(messageTypes.userDefends),
+        setMessage(messageTypes.userDefendsAgain),
       );
 
       dispatch(
@@ -109,7 +109,7 @@ export function takeAllCards(player) {
       );
     } else {
       dispatch(
-        setMessage(messageTypes.userAttacks),
+        setMessage(messageTypes.userAttacksAgain),
       );
     }
   };

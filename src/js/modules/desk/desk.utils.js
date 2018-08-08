@@ -123,7 +123,7 @@ export default class DeskUtils {
     const selectedCards = [];
 
     const notBeatenCards = desk.attackCards.slice(
-      desk.attackCards.lenth,
+      desk.defendCards.length,
     );
 
     if (notBeatenCards.length && state[player].action === defend) {

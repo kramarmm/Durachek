@@ -14,15 +14,15 @@ class Message extends Component {
   }
 
   componentWillMount() {
-    if (this.props.text.length) {
+    if (this.props.message.text.length) {
       this.show();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.text.length
-      && this.props.text !== nextProps.text
+      nextProps.message.text.length
+      && this.props.message.timestamp !== nextProps.message.timestamp
     ) {
       this.show();
     }
@@ -55,7 +55,7 @@ class Message extends Component {
     return (
       <div className="message">
         <div className="message-text">
-          {this.props.text}
+          {this.props.message.text}
         </div>
       </div>
     );
