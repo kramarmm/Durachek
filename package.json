@@ -7,7 +7,7 @@
     "test": "jest",
     "postinstall": "webpack -p --progress",
     "start": "node server.js",
-    "dev": "node dev-server.js",
+    "dev": "node dev-server.js"
   },
   "keywords": [
     "durak",
