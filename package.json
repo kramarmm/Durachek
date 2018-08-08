@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node dev-server.js"
+    "postinstall": "webpack -p --progress",
+    "start": "node server.js",
+    "dev": "node dev-server.js",
   },
   "keywords": [
     "durak",
