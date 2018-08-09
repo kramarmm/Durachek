@@ -127,6 +127,10 @@ export default class DeskUtils {
         return playerCards;
       }
 
+      if (!state[opponent].cards.length) {
+        return [];
+      }
+
       if (desk.attackCards.length === 6) {
         return [];
       }

@@ -99,7 +99,9 @@ export function takeAllCards(player) {
       },
     });
 
-    const nextActivePlayer = DeskUtils.getNextActivePlayer(state);
+    const nextActivePlayer = player === user
+      ? robot
+      : user;
 
     dispatch(
       startTurn(nextActivePlayer),

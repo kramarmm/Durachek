@@ -55,6 +55,7 @@ export function attackCards(state = [], action) {
     case MOVE_TO_BREAK:
     case USER_TAKE_ALL_CARDS:
     case ROBOT_TAKE_ALL_CARDS:
+    case START_GAME:
       return [];
 
     default:
@@ -73,6 +74,7 @@ export function defendCards(state = [], action) {
     case MOVE_TO_BREAK:
     case USER_TAKE_ALL_CARDS:
     case ROBOT_TAKE_ALL_CARDS:
+    case START_GAME:
       return [];
 
     default:

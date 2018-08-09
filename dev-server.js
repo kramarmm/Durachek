@@ -22,6 +22,6 @@ app.listen(port, function(error) {
   if (error) {
       console.error(error);
   } else {
-      console.info(' ==> Listening on port 3000');
+      console.info('\nServer is on! \n \\ \/\n\ . \.\n  O');
   }
 })

@@ -1,7 +1,7 @@
 import DeckUtils from '../deck/deck.utils.js';
 import DeskUtils from '../desk/desk.utils.js';
 
-import { defend, attack } from '../desk/desk.consts';
+import { defend, attack, START_GAME } from '../desk/desk.consts';
 
 import * as robotConsts from '../robot/robot.consts';
 import * as userConsts from '../user/user.consts';
@@ -41,6 +41,9 @@ export default class Player {
           ...state.slice(index + 1, state.length),
         ];
 
+      case START_GAME:
+        return [];
+
       default:
         return state;
     }
@@ -50,6 +53,10 @@ export default class Player {
     switch (action.type) {
       case actionTypes[`${this.TYPE}_SET_ACTIVE`]:
         return action.payload.availableCards;
+
+      case START_GAME:
+        return [];
+
       default:
         return state;
     }
