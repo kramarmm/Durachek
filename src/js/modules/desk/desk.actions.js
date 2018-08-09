@@ -14,6 +14,7 @@ import {
 } from './desk.consts';
 
 import { transferControlToRobot } from '../robot/robot.actions';
+import { setWillTakeAllCards, takeAllCards } from '../player/player.actions';
 
 import { setMessage } from '../message/message.actions';
 import { messageTypes } from '../message/message.consts';
@@ -30,6 +31,22 @@ export const startTurn = activePlayer => (dispatch, getState) => {
       ? robot
       : user
     : robot;
+
+  // reset willTakeAllCards //
+  dispatch(
+    setWillTakeAllCards(
+      firstTaker,
+      false,
+    )
+  );
+
+  dispatch(
+    setWillTakeAllCards(
+      secondTaker,
+      false,
+    )
+  );
+  // reset willTakeAllCards //
 
   dispatch(
     DeckUtils.getCards(
@@ -108,6 +125,18 @@ export const getOutCards = () => (dispatch, getState) => {
   }
 }
 
+export const finishTurn = () => (dispatch, getState) => {
+  if (getState().robot.willTakeAll) {
+    return dispatch(
+      takeAllCards(robot),
+    );
+  }
+
+  return dispatch(
+    moveToBreak(),
+  );
+}
+
 export const moveToBreak = () => (dispatch, getState) => {
   dispatch({ type: MOVE_TO_BREAK });
 
@@ -128,6 +157,23 @@ export const moveToBreak = () => (dispatch, getState) => {
   } else {
     dispatch(
       setMessage(messageTypes.userAttacks),
+    );
+  }
+}
+
+export const onWillTakeAll = player => (dispatch, getState) => {
+  dispatch(
+    setWillTakeAllCards(
+      player,
+      true, // state of willTakeAll
+    ),
+  );
+
+  const nextActivePlayer = DeskUtils.getNextActivePlayer(getState());
+
+  if (nextActivePlayer === robot) {
+    dispatch(
+      transferControlToRobot()
     );
   }
 }

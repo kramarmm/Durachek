@@ -110,66 +110,70 @@ export default class DeskUtils {
       return [];
     }
 
+    const opponent = player === user
+      ? robot
+      : user;
+
     const { desk } = state;
 
     const playerCards = state[player].cards;
 
+    const trumpSuit = state.desk.trumpCard.suit;
+
+    const selectedCards = [];
+
     if (state[player].action === attack) {
-      if (!desk.defendCards.length) {
+      if (!desk.defendCards.length && !state[opponent].willTakeAll) {
         return playerCards;
       }
 
       if (desk.attackCards.length === 6) {
         return [];
       }
-    }
 
-    const trumpSuit = state.desk.trumpCard.suit;
+      const cards = [
+        ...desk.defendCards,
+        ...desk.attackCards,
+      ];
 
-    const selectedCards = [];
-
-    const notBeatenCards = desk.attackCards.slice(
-      desk.defendCards.length,
-    );
-
-    if (notBeatenCards.length && state[player].action === defend) {
-      for (let i = 0; i < notBeatenCards.length; i++) {
-        for (let j = 0; j < playerCards.length; j++) {
-          if (
-            playerCards[j].suit === trumpSuit &&
-            notBeatenCards[i].suit !== trumpSuit
-          ) {
-            selectedCards.push(playerCards[j]);
-            continue;
-          }
-
-          if (
-            playerCards[j].suit === notBeatenCards[i].suit &&
-            playerCards[j].value > notBeatenCards[i].value
-          ) {
-            selectedCards.push(playerCards[j]);
+      if (cards.length && state[player].action === attack) {
+        for (let i = 0; i < cards.length; i++) {
+          for (let j = 0; j < playerCards.length; j++) {
+            if (playerCards[j].value === cards[i].value) {
+              selectedCards.push(playerCards[j]);
+            }
           }
         }
+
+        return selectedCards;
       }
+    } else {
+      const notBeatenCards = desk.attackCards.slice(
+        desk.defendCards.length,
+      );
 
-      return selectedCards;
-    }
+      if (notBeatenCards.length && state[player].action === defend) {
+        for (let i = 0; i < notBeatenCards.length; i++) {
+          for (let j = 0; j < playerCards.length; j++) {
+            if (
+              playerCards[j].suit === trumpSuit &&
+              notBeatenCards[i].suit !== trumpSuit
+            ) {
+              selectedCards.push(playerCards[j]);
+              continue;
+            }
 
-    const cards = [
-      ...desk.defendCards,
-      ...desk.attackCards,
-    ];
-
-    if (cards.length && state[player].action === attack) {
-      for (let i = 0; i < cards.length; i++) {
-        for (let j = 0; j < playerCards.length; j++) {
-          if (playerCards[j].value === cards[i].value) {
-            selectedCards.push(playerCards[j]);
+            if (
+              playerCards[j].suit === notBeatenCards[i].suit &&
+              playerCards[j].value > notBeatenCards[i].value
+            ) {
+              selectedCards.push(playerCards[j]);
+            }
           }
         }
-      }
 
-      return selectedCards;
+        return selectedCards;
+      }
     }
 
     return [];
@@ -197,7 +201,7 @@ export default class DeskUtils {
 
   static isPlayerAlreadyTookCards(player, desk) {
     return player.isActive
-      ? (desk.cards - desk.attackCards) > 1
+      ? (desk.attackCards.length - desk.defendCards.length) > 1
       : false;
   }
 }

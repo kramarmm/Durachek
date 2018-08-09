@@ -5,14 +5,13 @@ import Card from './card';
 import Button from './button';
 import Message from '../message/message';
 
-import { moveToBreak } from './desk.actions';
+import { finishTurn, onWillTakeAll } from './desk.actions';
 import DeskUtils from './desk.utils';
 
 import { userPutCard } from '../user/user.actions';
-import { takeAllCards } from '../player/player.actions';
+import { setWillTakeAllCards } from '../player/player.actions';
 
-import { user } from '../user/user.consts';
-import { robot } from '../robot/robot.consts';
+import { user as userType } from '../user/user.consts';
 import { defend, attack } from './desk.consts';
 
 class DeskScreen extends Component {
@@ -25,7 +24,7 @@ class DeskScreen extends Component {
       visibleCardsLength: false,
     };
 
-    this.userTakeAllCards = this.props.takeAllCards.bind(this, user);
+    this.userTakeAllCards = this.props.onWillTakeAll.bind(this, userType);
 
     this.showCardsLength = this.toggleCardsLength.bind(this, true);
     this.hideCardsLength = this.toggleCardsLength.bind(this, false);
@@ -104,7 +103,7 @@ class DeskScreen extends Component {
                   <Card card={desk.trumpCard} />
                 </div>
               ) : (
-                <span>
+                <span className="deck-empty">
                   &#9760;
                 </span>
               )
@@ -195,6 +194,7 @@ class DeskScreen extends Component {
                   className={
                     `btn btn-game ${
                        !user.availableCards.length
+                       && !DeskUtils.isPlayerAlreadyTookCards(userType, desk)
                         ? 'glowed'
                         : ''
                      }`
@@ -212,7 +212,7 @@ class DeskScreen extends Component {
                         : ''
                      }`
                    }
-                  onClick={this.props.moveToBreak}
+                  onClick={this.props.finishTurn}
                   disabled={!this.state.userMayFinishTurn}
                 />
               )
@@ -251,8 +251,8 @@ const mapStateToProps = state => ({ ...state });
 export default connect(
   mapStateToProps,
   {
-    moveToBreak,
+    finishTurn,
     userPutCard,
-    takeAllCards,
+    onWillTakeAll,
   },
 )(DeskScreen);

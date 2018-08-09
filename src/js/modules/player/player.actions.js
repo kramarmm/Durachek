@@ -19,12 +19,14 @@ import {
   robot,
   ROBOT_PUT_CARD,
   ROBOT_TAKE_ALL_CARDS,
+  ROBOT_WILL_TAKE_ALL_CARDS,
 } from '../robot/robot.consts';
 
 import {
   user,
   USER_PUT_CARD,
   USER_TAKE_ALL_CARDS,
+  USER_WILL_TAKE_ALL_CARDS,
 } from '../user/user.consts';
 
 export function putCard(
@@ -57,6 +59,10 @@ export function putCard(
     const opponent = player === user
       ? robot
       : user;
+
+    if (state[opponent].willTakeAll) {
+      return;
+    }
 
     DeskUtils.setActivePlayer(
       dispatch,
@@ -114,3 +120,11 @@ export function takeAllCards(player) {
     }
   };
 }
+
+export const setWillTakeAllCards = (player, state) => dispatch =>
+  dispatch({
+    type: player === user
+      ? USER_WILL_TAKE_ALL_CARDS
+      : ROBOT_WILL_TAKE_ALL_CARDS,
+    payload: { state },
+  });
