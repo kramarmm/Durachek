@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { getOutCards } from '../desk/desk.actions';
+import StartButton from './start-button';
+
 class EndScreen extends Component {
   render() {
     const {
@@ -16,13 +19,23 @@ class EndScreen extends Component {
         {
           userHaveNoCards
           && robotHaveNoCards ? (
-            <div>Friendship won!</div>
+            <div className="end-text font-lg">
+              Friendship won!
+            </div>
           ) : userHaveNoCards ? (
-            <div>You are the winner!</div>
+            <div className="end-text font-lg">
+              You are the winner!
+            </div>
           ) : (
-            <div>Robot is the winner!</div>
+            <div className="end-text font-lg">
+              Robot is the winner!
+            </div>
           )
         }
+
+        <StartButton
+          getOutCards={this.props.getOutCards}
+        />
       </div>
     );
   }
@@ -35,4 +48,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
+  {
+    getOutCards,
+  }
 )(EndScreen);

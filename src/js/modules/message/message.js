@@ -45,7 +45,7 @@ class Message extends Component {
 
     this.timer = window.setTimeout(
       this.hide,
-      1200
+      1700
     );
   }
 
